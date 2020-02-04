@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.card_list.view.*
 
 interface LandmarkListener{
@@ -30,6 +31,13 @@ class LandmarkAdapter constructor(private var landmarks: ArrayList<PostModel>,
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(postModel: PostModel,listener: LandmarkListener) {
             itemView.mCardName.text = postModel.title
+            itemView.mCardDescription.text = postModel.description
+            val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
+            val adapter = ImageAdapter(itemView.context,postModel.images)
+            viewPager.adapter = adapter
+            itemView.setOnClickListener {
+                listener.onLandMarkClick(postModel)
+            }
         }
     }
 

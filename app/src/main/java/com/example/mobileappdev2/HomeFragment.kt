@@ -14,20 +14,26 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment(),LandmarkListener {
 
+    lateinit var app : MainApp
+    lateinit var homeView: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_home, container, false)
+        homeView = view
+        app = activity!!.application as MainApp
         val layoutManager = LinearLayoutManager(view.context)
         view.mLandmarkList.layoutManager = layoutManager as RecyclerView.LayoutManager?
-        val arrayList: ArrayList<PostModel> = ArrayList()
-        arrayList.add(PostModel("hello","test"))
-
-        view.mLandmarkList.adapter = LandmarkAdapter(arrayList,this)
-
+        homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(),this)
         return view
+    }
+
+    override fun onResume() {
+        homeView.mLandmarkList.adapter?.notifyDataSetChanged()
+        super.onResume()
     }
 
     override fun onLandMarkClick(postModel: PostModel) {
