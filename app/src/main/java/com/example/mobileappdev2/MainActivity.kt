@@ -56,8 +56,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.item_add -> startActivityForResult<PostActivity>(0)
         }
         return super.onOptionsItemSelected(item)

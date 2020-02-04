@@ -75,6 +75,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post" />
+
+            <Button
+                android:id="@+id/mPostDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
