@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.intentFor
 
-class HomeFragment : Fragment(),LandmarkListener {
+class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
 
     lateinit var app : MainApp
     lateinit var homeView: View
@@ -32,12 +34,13 @@ class HomeFragment : Fragment(),LandmarkListener {
     }
 
     override fun onResume() {
+        homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(),this)
         homeView.mLandmarkList.adapter?.notifyDataSetChanged()
         super.onResume()
     }
 
     override fun onLandMarkClick(postModel: PostModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        startActivityForResult(context?.intentFor<PostActivity>()!!.putExtra("landmark_edit",postModel), 0)
     }
 
 }
