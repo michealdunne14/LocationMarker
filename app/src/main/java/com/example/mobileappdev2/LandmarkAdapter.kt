@@ -11,7 +11,7 @@ interface LandmarkListener{
     fun onLandMarkClick(postModel: PostModel)
 }
 
-class LandmarkAdapter constructor(private var landmarks: ArrayList<PostModel>,
+class LandmarkAdapter constructor(private var landmarks: List<PostModel>,
                                   private val listener: LandmarkListener) : RecyclerView.Adapter<LandmarkAdapter.MainHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LandmarkAdapter.MainHolder {
@@ -32,9 +32,11 @@ class LandmarkAdapter constructor(private var landmarks: ArrayList<PostModel>,
         fun bind(postModel: PostModel,listener: LandmarkListener) {
             itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description
+            itemView.mCardCountry.text = postModel.country
+            itemView.mCardDate.text = postModel.datevisted
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-            val adapter = ImageAdapter(itemView.context,postModel.images)
-            viewPager.adapter = adapter
+//            val adapter = ImageAdapter(itemView.context,postModel.images)
+//            viewPager.adapter = adapter
             itemView.setOnClickListener {
                 listener.onLandMarkClick(postModel)
             }

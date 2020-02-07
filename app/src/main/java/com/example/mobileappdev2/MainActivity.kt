@@ -1,19 +1,16 @@
 package com.example.mobileappdev2
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.main_layout.*
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivityForResult
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),LandmarkListener {
     lateinit var app : MainApp
     lateinit var pagerAdapter: TabsPagerAdapter
 
@@ -22,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         pagerAdapter = TabsPagerAdapter(supportFragmentManager)
+        app = application as MainApp
 
         toolbar.title = title
         setSupportActionBar(toolbar)
@@ -83,5 +81,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         false
+    }
+
+    override fun onLandMarkClick(postModel: PostModel) {
+        startActivityForResult(intentFor<PostActivity>().putExtra("landmark_edit",postModel), 0)
     }
 }
