@@ -6,10 +6,14 @@ import org.jetbrains.anko.info
 
 class MainApp : Application(), AnkoLogger {
 
-    val landmarks = MemoryStore()
+//  JSON Store for database
+//    lateinit var landmarks: MemoryStore
+//  Room Database
+    lateinit var landmarks: MemoryStoreRoom
 
     override fun onCreate() {
         super.onCreate()
         info { "App has Started" }
+        landmarks = MemoryStoreRoom(applicationContext)
     }
 }

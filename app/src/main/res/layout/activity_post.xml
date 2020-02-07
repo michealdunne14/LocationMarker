@@ -63,12 +63,17 @@
                 android:hint="Description" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/mPostCountry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Address"
+                android:hint="Country"
                 android:inputType="textPostalAddress" />
+
+            <CalendarView
+                android:id="@+id/mPostVisited"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/mPostButton"
