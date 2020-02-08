@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 
-class ImageAdapter(private val mContext: Context,private val imageList: ArrayList<String>): PagerAdapter() {
+class ImageAdapter(private val mContext: Context,private val imageList: List<String>): PagerAdapter() {
     override fun isViewFromObject(view: View, obj: Any): Boolean {
         return view === obj
     }

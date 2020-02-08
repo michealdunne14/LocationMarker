@@ -14,6 +14,5 @@ data class PostModel(@PrimaryKey(autoGenerate = true) var id: Long = 0,
                      var description: String = "",
                      var country: String = "",
                      var datevisted: String = "",
-//                     @TypeConverters(Converters::class)
-                     var images: ArrayList<String> = ArrayList()
+                     var images: List<String> = ArrayList()
 ): Parcelable

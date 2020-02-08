@@ -35,18 +35,22 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             mPostDescription.setText(postModel.description)
 
             val viewPager = findViewById<ViewPager>(R.id.mPostViewPager)
-//            imageList.addAll(postModel.images)
-//            val adapter = ImageAdapter(this,postModel.images)
-//            viewPager.adapter = adapter
+            imageList.addAll(postModel.images)
+            val adapter = ImageAdapter(this,postModel.images)
+            viewPager.adapter = adapter
             editingPost = true
             mPostButton.text = getString(R.string.save)
             mPostDelete.visibility = View.VISIBLE
         }
 
         mPostDelete.setOnClickListener {
-            app.landmarks.delete(postModel)
-            setResult(Activity.RESULT_OK)
-            finish()
+            doAsync {
+                app.landmarks.delete(postModel)
+                onComplete {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
+            }
         }
         var date = String()
 
@@ -57,12 +61,12 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
         })
 
         mPostButton.setOnClickListener {
-//            postModel.images.clear()
+            postModel.images = ArrayList()
             postModel.title = mPostTitle.text.toString()
             postModel.description = mPostDescription.text.toString()
             postModel.country = mPostCountry.text.toString()
             postModel.datevisted = date
-//            postModel.images.addAll(imageList)
+            (postModel.images as ArrayList<String>).addAll(imageList)
             if (postModel.title.isNotEmpty()){
                 doAsync {
                     if (editingPost) {
