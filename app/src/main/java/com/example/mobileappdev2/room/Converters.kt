@@ -3,6 +3,7 @@ package com.example.mobileappdev2.room
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 class Converters {
 
@@ -16,5 +17,10 @@ class Converters {
         }
 
         return Gson().fromJson(value, imagesType)
+    }
+
+    @TypeConverter
+    fun imagesToString(images: List<String>): String? {
+        return Gson().toJson(images)
     }
 }

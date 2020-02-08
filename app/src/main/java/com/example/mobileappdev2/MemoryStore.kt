@@ -60,7 +60,7 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
         if (post != null){
             post.title = postModel.title
             post.description = postModel.description
-//            post.images = postModel.images
+            post.images = postModel.images
             logAll()
         }
         serialize()

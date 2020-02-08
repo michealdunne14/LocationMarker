@@ -12,6 +12,8 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
 
     var dao: PostDao
     var normalArray = arrayListOf<Country>()
+    var posts: List<PostModel> = ArrayList()
+
 
     init {
         val database = Room.databaseBuilder(context, Database::class.java, "room_sample.db")
@@ -21,7 +23,8 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
     }
 
     override fun findAll(): List<PostModel> {
-        return dao.findAll()
+        posts = dao.findAll()
+        return posts
     }
 
     override fun create(postModel: PostModel) {
@@ -37,7 +40,13 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
     }
 
     override fun search(query: CharSequence?): ArrayList<PostModel> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val searchedPosts = ArrayList<PostModel>()
+        for(marks in posts){
+            if (marks.title.contains(query!!)){
+                searchedPosts.add(marks)
+            }
+        }
+        return searchedPosts
     }
 
     override fun preparedata() {
@@ -54,6 +63,6 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
     }
 
     override fun getCountryData(): ArrayList<Country> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return normalArray
     }
 }

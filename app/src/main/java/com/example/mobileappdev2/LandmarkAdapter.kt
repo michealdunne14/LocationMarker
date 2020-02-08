@@ -35,8 +35,8 @@ class LandmarkAdapter constructor(private var landmarks: List<PostModel>,
             itemView.mCardCountry.text = postModel.country
             itemView.mCardDate.text = postModel.datevisted
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-//            val adapter = ImageAdapter(itemView.context,postModel.images)
-//            viewPager.adapter = adapter
+            val adapter = ImageAdapter(itemView.context,postModel.images)
+            viewPager.adapter = adapter
             itemView.setOnClickListener {
                 listener.onLandMarkClick(postModel)
             }
