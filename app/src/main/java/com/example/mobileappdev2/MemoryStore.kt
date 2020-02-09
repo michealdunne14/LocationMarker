@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import java.nio.file.Files.exists
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,6 +47,10 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
         return landmarks
     }
 
+    override fun findPosts(): List<PostModel> {
+        return landmarks
+    }
+
     override fun create(postModel: PostModel) {
         postModel.id = generateRandomId()
         landmarks.add(postModel)
@@ -74,7 +77,7 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
         serialize()
     }
 
-    override fun search(query: CharSequence?): ArrayList<PostModel> {
+    override fun search(query: CharSequence?, filter: Boolean): ArrayList<PostModel> {
         val searchedPosts = ArrayList<PostModel>()
         for(marks in landmarks){
             if (marks.title.contains(query!!)){

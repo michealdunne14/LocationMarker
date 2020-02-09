@@ -23,6 +23,7 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
     lateinit var app : MainApp
     lateinit var homeView: View
     var search = false
+    var filter = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +39,16 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
             homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(), this@HomeFragment,app.landmarks)
         }
 
+        homeView.mFilteringItems.setOnClickListener {
+            if (filter){
+                filter = false
+                homeView.mFilteringItems.text = getString(R.string.filter_all)
+            }else{
+                filter = true
+                homeView.mFilteringItems.text = getString(R.string.filter_by_likes)
+            }
+        }
+
         app.landmarks.preparedata()
 
         homeView.mSearchFloatingActionButton.setOnClickListener {
@@ -45,6 +56,8 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
                 showFilter()
             }else{
                 cancelFilter()
+                homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findPosts(), this@HomeFragment, app.landmarks)
+                homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
         }
 
@@ -56,7 +69,7 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
             }
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchedLandmarks = app.landmarks.search(characterSearch)
+                val searchedLandmarks = app.landmarks.search(characterSearch,filter)
                 homeView.mLandmarkList.adapter = LandmarkAdapter(
                     searchedLandmarks,
                     this@HomeFragment,

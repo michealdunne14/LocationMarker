@@ -3,8 +3,6 @@ package com.example.mobileappdev2
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.mobileappdev2.room.Converters
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

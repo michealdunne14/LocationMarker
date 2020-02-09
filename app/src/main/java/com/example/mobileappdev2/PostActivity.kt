@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.CalendarView
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.activity_post.toolbar
+import kotlinx.android.synthetic.main.main_layout.*
 import org.jetbrains.anko.*
 import java.util.ArrayList
 
@@ -25,7 +27,9 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
         setContentView(R.layout.activity_post)
         app = application as MainApp
 
+        toolbar.title = getString(R.string.post)
         setSupportActionBar(toolbar)
+
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
