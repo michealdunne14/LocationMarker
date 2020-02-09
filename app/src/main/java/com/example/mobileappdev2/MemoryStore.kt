@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 class MemoryStore(val context: Context): PostStore,AnkoLogger {
 
     val landmarks = ArrayList<PostModel>()
-    var normalArray = arrayListOf<Country>()
+    var countries = arrayListOf<Country>()
     var landmarkStore = mutableListOf<PostModel>()
 
     val JSON_FILE = "MemoryStore.json"
@@ -50,6 +50,15 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
     override fun findPosts(): List<PostModel> {
         return landmarks
     }
+
+    override fun searchCountries(query: CharSequence?): ArrayList<Country> {
+        val searchedPosts = ArrayList<Country>()
+        for(country in countries){
+            if (country.countryName.contains(query!!)){
+                searchedPosts.add(country)
+            }
+        }
+        return searchedPosts    }
 
     override fun create(postModel: PostModel) {
         postModel.id = generateRandomId()
@@ -92,7 +101,7 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
     }
 
     override fun getCountryData(): ArrayList<Country> {
-        return normalArray
+        return countries
     }
 
     override fun preparedata() {
@@ -103,9 +112,9 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
                 countryName = "UnIdentified"
             }
             val simpleCountry = Country(countryName,countryCode)
-            normalArray.add(simpleCountry)
+            countries.add(simpleCountry)
         }
-        normalArray = ArrayList(normalArray.sortedWith(compareBy { it.countryName }))
+        countries = ArrayList(countries.sortedWith(compareBy { it.countryName }))
     }
 
 }

@@ -9,16 +9,16 @@ import android.widget.CalendarView
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.activity_post.toolbar
-import kotlinx.android.synthetic.main.main_layout.*
 import org.jetbrains.anko.*
 import java.util.ArrayList
 
-class PostActivity : AppCompatActivity(),AnkoLogger {
+class PostActivity : AppCompatActivity(),AnkoLogger,CountryListener {
 
     var postModel = PostModel()
     lateinit var app : MainApp
     private val imageList = ArrayList<String>()
     var editingPost = false
+    lateinit var customDialog: CustomActivity
 
     val IMAGE_REQUEST = 1
 
@@ -37,7 +37,7 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             postModel = intent.extras?.getParcelable<PostModel>("landmark_edit")!!
             mPostTitle.setText(postModel.title)
             mPostDescription.setText(postModel.description)
-            mPostCountry.setText(postModel.country)
+            mPostSelectCountry.text = postModel.country
             val viewPager = findViewById<ViewPager>(R.id.mPostViewPager)
             imageList.addAll(postModel.images)
             val adapter = ImageAdapter(this,postModel.images)
@@ -45,6 +45,15 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             editingPost = true
             mPostButton.text = getString(R.string.save)
             mPostDelete.visibility = View.VISIBLE
+        }
+
+        mPostSelectCountry.setOnClickListener {
+            val dataAdapter = DataAdapter(app.landmarks.getCountryData(), this)
+            customDialog = CustomActivity(this, dataAdapter,app.landmarks,this)
+
+            customDialog.show()
+            customDialog.setCanceledOnTouchOutside(false)
+
         }
 
         mPostDelete.setOnClickListener {
@@ -68,7 +77,7 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             postModel.images = ArrayList()
             postModel.title = mPostTitle.text.toString()
             postModel.description = mPostDescription.text.toString()
-            postModel.country = mPostCountry.text.toString()
+            postModel.country = mPostSelectCountry.text.toString()
             if (date != "") {
                 postModel.datevisted = date
             }
@@ -113,5 +122,11 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
                 }
             }
         }
+    }
+
+    override fun onCountryClick(string: String) {
+        postModel.country = string
+        mPostSelectCountry.text = string
+        customDialog.dismiss()
     }
 }
