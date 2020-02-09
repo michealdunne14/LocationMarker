@@ -27,6 +27,10 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
         return posts
     }
 
+    override fun findPosts(): List<PostModel>{
+        return posts
+    }
+
     override fun create(postModel: PostModel) {
         return dao.create(postModel)
     }
@@ -39,11 +43,17 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
         return dao.deletePost(postModel)
     }
 
-    override fun search(query: CharSequence?): ArrayList<PostModel> {
+    override fun search(query: CharSequence?, filter: Boolean): ArrayList<PostModel> {
         val searchedPosts = ArrayList<PostModel>()
         for(marks in posts){
             if (marks.title.contains(query!!)){
-                searchedPosts.add(marks)
+                if(filter){
+                    if(marks.postLiked) {
+                        searchedPosts.add(marks)
+                    }
+                }else{
+                    searchedPosts.add(marks)
+                }
             }
         }
         return searchedPosts

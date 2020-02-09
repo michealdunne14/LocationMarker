@@ -45,6 +45,8 @@
                 android:id="@+id/mPostSelectImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bluebutton"
+                android:textColor="@color/colorWhite"
                 android:text="Select Images" />
 
             <EditText
@@ -80,12 +82,17 @@
                 android:id="@+id/mPostButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Post" />
+                android:background="@drawable/greenbutton"
+                android:text="Post"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorWhite" />
 
             <Button
                 android:id="@+id/mPostDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/redbutton"
+                android:textColor="@color/colorWhite"
                 android:text="Delete"
                 android:visibility="gone"/>
         </LinearLayout>
