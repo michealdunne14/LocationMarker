@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.fragment_home.view.mLandmarkList
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
-import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
 
@@ -37,7 +35,7 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
         val layoutManager = LinearLayoutManager(view.context)
         view.mLandmarkList.layoutManager = layoutManager as RecyclerView.LayoutManager?
         doAsync {
-            homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(), this@HomeFragment)
+            homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(), this@HomeFragment,app.landmarks)
         }
 
         app.landmarks.preparedata()
@@ -59,7 +57,11 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchedLandmarks = app.landmarks.search(characterSearch)
-                homeView.mLandmarkList.adapter = LandmarkAdapter(searchedLandmarks,this@HomeFragment)
+                homeView.mLandmarkList.adapter = LandmarkAdapter(
+                    searchedLandmarks,
+                    this@HomeFragment,
+                    app.landmarks
+                )
                 homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
 
@@ -95,7 +97,11 @@ class HomeFragment : Fragment(),LandmarkListener,AnkoLogger {
 
     override fun onResume() {
         doAsync {
-            homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(), this@HomeFragment)
+            homeView.mLandmarkList.adapter = LandmarkAdapter(
+                app.landmarks.findAll(),
+                this@HomeFragment,
+                app.landmarks
+            )
         }
         homeView.mLandmarkList.adapter?.notifyDataSetChanged()
         super.onResume()

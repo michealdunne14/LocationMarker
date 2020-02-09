@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(),LandmarkListener {
         pagerAdapter = TabsPagerAdapter(supportFragmentManager)
         app = application as MainApp
 
-        toolbar.title = title
+        toolbar.title = getString(R.string.locations_marker)
         setSupportActionBar(toolbar)
 
 
