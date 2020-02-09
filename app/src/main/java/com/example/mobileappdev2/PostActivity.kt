@@ -33,7 +33,7 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             postModel = intent.extras?.getParcelable<PostModel>("landmark_edit")!!
             mPostTitle.setText(postModel.title)
             mPostDescription.setText(postModel.description)
-
+            mPostCountry.setText(postModel.country)
             val viewPager = findViewById<ViewPager>(R.id.mPostViewPager)
             imageList.addAll(postModel.images)
             val adapter = ImageAdapter(this,postModel.images)
@@ -65,7 +65,9 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
             postModel.title = mPostTitle.text.toString()
             postModel.description = mPostDescription.text.toString()
             postModel.country = mPostCountry.text.toString()
-            postModel.datevisted = date
+            if (date != "") {
+                postModel.datevisted = date
+            }
             (postModel.images as ArrayList<String>).addAll(imageList)
             if (postModel.title.isNotEmpty()){
                 doAsync {
@@ -73,9 +75,6 @@ class PostActivity : AppCompatActivity(),AnkoLogger {
                         app.landmarks.update(postModel.copy())
                     } else {
                         app.landmarks.create(postModel.copy())
-                    }
-                    uiThread {
-
                     }
                     onComplete {
                         info { "add Button Pressed: ${postModel}" }
