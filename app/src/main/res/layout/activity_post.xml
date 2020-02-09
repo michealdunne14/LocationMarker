@@ -65,13 +65,13 @@
                 android:inputType="textPersonName"
                 android:hint="Description" />
 
-            <EditText
-                android:id="@+id/mPostCountry"
+            <Button
+                android:id="@+id/mPostSelectCountry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Country"
-                android:inputType="textPostalAddress" />
+                android:background="@drawable/greenbutton"
+                android:textColor="@color/colorWhite"
+                android:text="Select Country" />
 
             <CalendarView
                 android:id="@+id/mPostVisited"

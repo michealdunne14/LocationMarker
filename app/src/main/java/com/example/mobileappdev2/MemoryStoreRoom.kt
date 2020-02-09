@@ -1,5 +1,6 @@
 package com.example.mobileappdev2
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Room
 import com.example.mobileappdev2.room.PostDao
@@ -11,7 +12,7 @@ import kotlin.collections.ArrayList
 class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
 
     var dao: PostDao
-    var normalArray = arrayListOf<Country>()
+    var countries = arrayListOf<Country>()
     var posts: List<PostModel> = ArrayList()
 
 
@@ -59,6 +60,17 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
         return searchedPosts
     }
 
+    @SuppressLint("DefaultLocale")
+    override fun searchCountries(query: CharSequence?): ArrayList<Country>{
+        val searchedPosts = ArrayList<Country>()
+        for(country in countries){
+            if (country.countryName.toUpperCase().contains(query!!)){
+                searchedPosts.add(country)
+            }
+        }
+        return searchedPosts
+    }
+
     override fun preparedata() {
         for (countryCode in Locale.getISOCountries()) {
             val locale = Locale("",countryCode)
@@ -67,12 +79,12 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
                 countryName = "UnIdentified"
             }
             val simpleCountry = Country(countryName,countryCode)
-            normalArray.add(simpleCountry)
+            countries.add(simpleCountry)
         }
-        normalArray = ArrayList(normalArray.sortedWith(compareBy { it.countryName }))
+        countries = ArrayList(countries.sortedWith(compareBy { it.countryName }))
     }
 
     override fun getCountryData(): ArrayList<Country> {
-        return normalArray
+        return countries
     }
 }
