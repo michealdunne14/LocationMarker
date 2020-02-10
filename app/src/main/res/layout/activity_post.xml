@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostActivity">
+    tools:context=".activity.PostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -55,6 +55,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="@drawable/border"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
                 android:hint="Title" />
 
             <EditText
@@ -62,7 +65,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
                 android:inputType="textPersonName"
+                android:background="@drawable/border"
+                android:layout_marginBottom="10dp"
                 android:hint="Description" />
 
             <Button
@@ -71,12 +78,14 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/greenbutton"
                 android:textColor="@color/colorWhite"
+                android:layout_marginBottom="10dp"
                 android:text="Select Country" />
 
             <CalendarView
                 android:id="@+id/mPostVisited"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/mPostButton"
@@ -84,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/greenbutton"
                 android:text="Post"
+
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/colorWhite" />
 
@@ -94,6 +104,7 @@
                 android:background="@drawable/redbutton"
                 android:textColor="@color/colorWhite"
                 android:text="Delete"
+                android:layout_marginBottom="10dp"
                 android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>

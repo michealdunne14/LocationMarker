@@ -1,6 +1,8 @@
 package com.example.mobileappdev2
 
 import android.app.Application
+import com.example.mobileappdev2.json.MemoryStore
+import com.example.mobileappdev2.room.MemoryStoreRoom
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
@@ -15,5 +17,6 @@ class MainApp : Application(), AnkoLogger {
         super.onCreate()
         info { "App has Started" }
         landmarks = MemoryStoreRoom(applicationContext)
+//        landmarks = MemoryStore(applicationContext)
     }
 }

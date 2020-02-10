@@ -1,7 +1,7 @@
 package com.example.mobileappdev2.room
 
 import androidx.room.*
-import com.example.mobileappdev2.PostModel
+import com.example.mobileappdev2.models.PostModel
 
 @Dao
 interface  PostDao {

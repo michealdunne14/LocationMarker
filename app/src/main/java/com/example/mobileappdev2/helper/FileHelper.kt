@@ -1,4 +1,4 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.helper
 
 import android.content.Context
 import android.util.Log

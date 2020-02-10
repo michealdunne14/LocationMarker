@@ -1,4 +1,7 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.interfacestore
+
+import com.example.mobileappdev2.models.Country
+import com.example.mobileappdev2.models.PostModel
 
 interface PostStore {
     fun findAll(): List<PostModel>

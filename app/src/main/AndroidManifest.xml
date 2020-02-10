@@ -5,21 +5,21 @@
     <application
         android:name=".MainApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/landmarks"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomActivity"></activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".activity.CustomDialog"></activity>
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PostActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".activity.PostActivity" />
+        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

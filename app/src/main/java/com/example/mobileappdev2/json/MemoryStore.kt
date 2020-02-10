@@ -1,6 +1,12 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.json
 
 import android.content.Context
+import com.example.mobileappdev2.interfacestore.PostStore
+import com.example.mobileappdev2.helper.exists
+import com.example.mobileappdev2.helper.read
+import com.example.mobileappdev2.helper.write
+import com.example.mobileappdev2.models.Country
+import com.example.mobileappdev2.models.PostModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -111,7 +117,7 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
             if (countryName == null) {
                 countryName = "UnIdentified"
             }
-            val simpleCountry = Country(countryName,countryCode)
+            val simpleCountry = Country(countryName, countryCode)
             countries.add(simpleCountry)
         }
         countries = ArrayList(countries.sortedWith(compareBy { it.countryName }))

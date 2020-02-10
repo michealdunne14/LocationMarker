@@ -1,4 +1,4 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import com.example.mobileappdev2.R
 import com.example.mobileappdev2.animation.Bounce
+import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.room.MemoryStoreRoom
 import kotlinx.android.synthetic.main.card_list.view.*
 import org.jetbrains.anko.doAsync
 
@@ -20,11 +23,14 @@ class LandmarkAdapter(
     private val memoryStore: MemoryStoreRoom
 ) : RecyclerView.Adapter<LandmarkAdapter.MainHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LandmarkAdapter.MainHolder {
-        return MainHolder(  LayoutInflater.from(parent.context).inflate(
-            R.layout.card_list,
-            parent,
-            false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
+        return MainHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.card_list,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = landmarks.size
@@ -46,7 +52,10 @@ class LandmarkAdapter(
             itemView.mCardDate.text = "Date Visited: ${postModel.datevisted}"
             var visitedCheck = postModel.postLiked
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-            val adapter = ImageAdapter(itemView.context,postModel.images)
+            val adapter = ImageAdapter(
+                itemView.context,
+                postModel.images
+            )
             viewPager.adapter = adapter
             itemView.setOnClickListener {
                 listener.onLandMarkClick(postModel)
@@ -60,8 +69,11 @@ class LandmarkAdapter(
 
             itemView.mCardLikeButton.setOnClickListener {
                 visitedCheck = !visitedCheck
+//              Trigger animation when liking a post.
                 if (visitedCheck) {
-                    val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
+                    val myAnim = AnimationUtils.loadAnimation(itemView.context,
+                        R.anim.bounce
+                    )
                     val interpolator = Bounce(0.2, 20.0)
                     myAnim.interpolator = interpolator
                     itemView.mCardLikeButton.startAnimation(myAnim)
@@ -69,7 +81,9 @@ class LandmarkAdapter(
                     postModel.postLiked = true
 
                 }else{
-                    val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
+                    val myAnim = AnimationUtils.loadAnimation(itemView.context,
+                        R.anim.bounce
+                    )
                     val interpolator = Bounce(0.2, 20.0)
                     myAnim.interpolator = interpolator
                     itemView.mCardLikeButton.startAnimation(myAnim)

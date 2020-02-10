@@ -1,10 +1,11 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.room
 
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Room
-import com.example.mobileappdev2.room.PostDao
-import com.example.mobileappdev2.room.Database
+import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.interfacestore.PostStore
+import com.example.mobileappdev2.models.Country
 import org.jetbrains.anko.AnkoLogger
 import java.util.*
 import kotlin.collections.ArrayList
@@ -17,21 +18,22 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
 
 
     init {
-        val database = Room.databaseBuilder(context, Database::class.java, "room_sample.db")
+        val database = Room.databaseBuilder(context, Database::class.java, "landmarks_database.db")
             .fallbackToDestructiveMigration()
             .build()
         dao = database.postDao()
     }
 
+//  Find all Landmarks
     override fun findAll(): List<PostModel> {
         posts = dao.findAll()
         return posts
     }
-
+//  Find Posts
     override fun findPosts(): List<PostModel>{
         return posts
     }
-
+//  Create
     override fun create(postModel: PostModel) {
         return dao.create(postModel)
     }
@@ -78,7 +80,10 @@ class MemoryStoreRoom(val context: Context): PostStore, AnkoLogger {
             if (countryName == null) {
                 countryName = "UnIdentified"
             }
-            val simpleCountry = Country(countryName,countryCode)
+            val simpleCountry = Country(
+                countryName,
+                countryCode
+            )
             countries.add(simpleCountry)
         }
         countries = ArrayList(countries.sortedWith(compareBy { it.countryName }))
