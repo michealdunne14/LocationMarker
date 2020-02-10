@@ -1,4 +1,4 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.helper
 
 import android.app.Activity
 import android.content.Context

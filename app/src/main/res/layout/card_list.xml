@@ -22,22 +22,26 @@
 
         <TextView
             android:id="@+id/mCardName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:text="Name"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/mCardDescription"
+            app:layout_constraintEnd_toStartOf="@+id/mCardCountry"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mCardImageList" />
 
         <TextView
             android:id="@+id/mCardDescription"
-            android:layout_width="149dp"
+            android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_below="@id/mCardName"
+            app:autoSizeTextType="uniform"
             android:text="Description"
             android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/mCardDate"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mCardName" />
 
@@ -56,8 +60,7 @@
             android:layout_height="wrap_content"
             android:text="Date"
             app:layout_constraintBottom_toTopOf="@+id/mCardLikeButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mCardDescription" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/mCardLikeButton"

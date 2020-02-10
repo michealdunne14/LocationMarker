@@ -1,10 +1,11 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.adapter
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
+import com.example.mobileappdev2.helper.readImageFromPath
 
 class ImageAdapter(private val mContext: Context,private val imageList: List<String>): PagerAdapter() {
     override fun isViewFromObject(view: View, obj: Any): Boolean {
@@ -18,7 +19,12 @@ class ImageAdapter(private val mContext: Context,private val imageList: List<Str
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imageView = ImageView(mContext)
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-        imageView.setImageBitmap(readImageFromPath(mContext,imageList[position]))
+        imageView.setImageBitmap(
+            readImageFromPath(
+                mContext,
+                imageList[position]
+            )
+        )
         container.addView(imageView,0)
         return imageView
     }

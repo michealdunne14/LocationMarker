@@ -1,15 +1,12 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
-import com.example.mobileappdev2.animation.Bounce
-import kotlinx.android.synthetic.main.card_list.view.*
+import com.example.mobileappdev2.R
+import com.example.mobileappdev2.models.Country
 import kotlinx.android.synthetic.main.country_list.view.*
-import org.jetbrains.anko.doAsync
 
 
 interface CountryListener{

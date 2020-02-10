@@ -1,9 +1,10 @@
-package com.example.mobileappdev2
+package com.example.mobileappdev2.adapter
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.mobileappdev2.fragment.HomeFragment
+import com.example.mobileappdev2.fragment.SettingsFragment
 
 class TabsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
