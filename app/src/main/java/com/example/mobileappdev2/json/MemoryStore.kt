@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.json
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.example.mobileappdev2.interfacestore.PostStore
 import com.example.mobileappdev2.helper.exists
@@ -57,14 +58,16 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
         return landmarks
     }
 
+    @SuppressLint("DefaultLocale")
     override fun searchCountries(query: CharSequence?): ArrayList<Country> {
         val searchedPosts = ArrayList<Country>()
         for(country in countries){
-            if (country.countryName.contains(query!!)){
+            if (country.countryName.toUpperCase().contains(query.toString().toUpperCase())){
                 searchedPosts.add(country)
             }
         }
-        return searchedPosts    }
+        return searchedPosts
+    }
 
     override fun create(postModel: PostModel) {
         postModel.id = generateRandomId()
@@ -96,7 +99,13 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
         val searchedPosts = ArrayList<PostModel>()
         for(marks in landmarks){
             if (marks.title.contains(query!!)){
-                searchedPosts.add(marks)
+                if(filter){
+                    if(marks.postLiked) {
+                        searchedPosts.add(marks)
+                    }
+                }else{
+                    searchedPosts.add(marks)
+                }
             }
         }
         return searchedPosts
