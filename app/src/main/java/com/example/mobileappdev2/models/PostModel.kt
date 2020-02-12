@@ -13,4 +13,5 @@ data class PostModel(@PrimaryKey(autoGenerate = true) var id: Long = 0,
                      var country: String = "",
                      var datevisted: String = "",
                      var postLiked: Boolean = false,
-                     var images: List<String> = ArrayList()): Parcelable
+                     var images: List<String> = ArrayList()
+): Parcelable
