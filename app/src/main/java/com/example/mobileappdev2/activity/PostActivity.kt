@@ -74,7 +74,6 @@ class PostActivity : AppCompatActivity(),AnkoLogger, CountryListener {
 
             customDialog.show()
             customDialog.setCanceledOnTouchOutside(false)
-
         }
 
         mPostDelete.setOnClickListener {
