@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.mobileappdev2.R
+import com.example.mobileappdev2.login.LoginActivity
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
@@ -18,7 +19,7 @@ class SplashActivity : AppCompatActivity(),AnkoLogger {
             override fun run() {
                 try {
                     sleep(1000)
-                    startActivity(Intent(baseContext, MainActivity::class.java))
+                    startActivity(Intent(baseContext, LoginActivity::class.java))
                     finish()
                 }catch (e: Exception){
                     e.printStackTrace()
