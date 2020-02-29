@@ -30,8 +30,7 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 //                        fireStore.findCurrentUser()
 //                    }
 //                    fireStore.fetchHillforts {
-                        view.startActivity(Intent(view.context, MainActivity::class.java))
-                        view.activity!!.finish()
+                        view.gotoMainPage()
 //                    }
                 } else {
 //                  If user does not exist then send appropriate error

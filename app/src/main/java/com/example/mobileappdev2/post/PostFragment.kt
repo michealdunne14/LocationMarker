@@ -104,7 +104,6 @@ class PostFragment : Fragment(), AnkoLogger, CountryListener {
             (postModel.images as ArrayList<String>).addAll(imageList)
             if (postModel.title.isNotEmpty() && postModel.images.isNotEmpty()){
                 doAsync {
-                    //                  Update editing landmark
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {

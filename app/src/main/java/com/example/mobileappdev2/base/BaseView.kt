@@ -27,4 +27,6 @@ open abstract class BaseView: Fragment(), AnkoLogger {
     open fun doSetDetails(email: String,password: String,name: String) {}
     open fun showFloatingAction(){}
     open fun hideFloatingAction(){}
+    open fun gotoMainPage(){}
+    open fun gotoMainPageFromRegister(){}
 }

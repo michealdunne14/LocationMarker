@@ -22,6 +22,7 @@ class LoginFragmentView : BaseView(),AnkoLogger {
 
 
     lateinit var presenter: LoginFragmentPresenter
+    lateinit var loginView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +30,7 @@ class LoginFragmentView : BaseView(),AnkoLogger {
     ): View? {
         // Inflate the layout for this fragment
         val view=  inflater.inflate(R.layout.fragment_login, container, false)
+        loginView = view
         presenter = initPresenter(LoginFragmentPresenter(this)) as LoginFragmentPresenter
 
         view.mLoginSignInButton.setOnClickListener {
@@ -41,6 +43,11 @@ class LoginFragmentView : BaseView(),AnkoLogger {
             view.findNavController().navigateUp()
         }
         return view
+    }
+
+    override fun gotoMainPage(){
+        this.startActivity(Intent(loginView.context, MainActivity::class.java))
+        this.activity!!.finish()
     }
 
 }

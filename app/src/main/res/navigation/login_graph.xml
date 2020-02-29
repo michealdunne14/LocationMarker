@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.mobileappdev2.RegisterFragment"
+        android:name="com.example.mobileappdev2.register.RegisterView"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
 </navigation>
