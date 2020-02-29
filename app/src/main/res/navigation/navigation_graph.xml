@@ -9,5 +9,22 @@
         android:id="@+id/pagerFragmentView"
         android:name="com.example.mobileappdev2.pager.PagerFragmentView"
         android:label="fragment_pager"
-        tools:layout="@layout/fragment_pager" />
+        tools:layout="@layout/fragment_pager" >
+        <action
+            android:id="@+id/action_pagerFragmentView_to_postFragment"
+            app:destination="@id/postFragment" >
+            <argument
+                android:name="postModel"
+                app:argType="com.example.mobileappdev2.models.PostModel"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.mobileappdev2.post.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" >
+        <argument
+            android:name="postModel"
+            app:argType="com.example.mobileappdev2.models.PostModel"/>
+    </fragment>
 </navigation>

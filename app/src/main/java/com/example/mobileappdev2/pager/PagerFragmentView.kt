@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
@@ -39,6 +40,7 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
 
         pagerView.mMainToolbar.title = getString(R.string.locations_marker)
         (activity as AppCompatActivity?)!!.setSupportActionBar(pagerView.mMainToolbar)
+        setHasOptionsMenu(true)
 
 
         //      Sets up view pager with pager adapter
@@ -97,23 +99,23 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
     //  Start activity for result of selected post.
     override fun onLandMarkClick(postModel: PostModel) {
         info { "Landmark Clicked" }
-        startActivityForResult(activity!!.intentFor<PostActivity>().putExtra("landmark_edit",postModel), 0)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
+        val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
+        pagerView.findNavController().navigate(action)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_add -> activity!!.startActivityForResult<PostActivity>(0)
+            R.id.item_add -> {
+                val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(PostModel())
+                pagerView.findNavController().navigate(action)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        activity!!.menuInflater.inflate(R.menu.main_menu,menu)
+        inflater.inflate(R.menu.main_menu,menu)
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
 }

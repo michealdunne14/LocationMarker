@@ -9,6 +9,7 @@ import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileappdev2.MainApp
@@ -17,6 +18,7 @@ import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.mLandmarkList

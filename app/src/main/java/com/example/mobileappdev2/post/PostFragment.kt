@@ -1,99 +1,98 @@
-package com.example.mobileappdev2.activity
+package com.example.mobileappdev2.post
 
 import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CalendarView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
+import com.example.mobileappdev2.activity.CustomDialog
 import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
 import com.example.mobileappdev2.adapter.ImageAdapter
 import com.example.mobileappdev2.helper.showImagePicker
 import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.activity_post.*
-import kotlinx.android.synthetic.main.activity_post.mPostToolbar
+import kotlinx.android.synthetic.main.fragment_post.view.*
+import kotlinx.android.synthetic.main.main_layout.view.*
 import org.jetbrains.anko.*
 import java.util.ArrayList
 
-class PostActivity : AppCompatActivity(),AnkoLogger, CountryListener {
+class PostFragment : Fragment(), AnkoLogger, CountryListener {
     var postModel = PostModel()
     lateinit var app : MainApp
     private val imageList = ArrayList<String>()
     var editingPost = false
     lateinit var customDialog: CustomDialog
-
     val IMAGE_REQUEST = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post)
-        app = application as MainApp
+    lateinit var postView: View
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view=  inflater.inflate(R.layout.fragment_post, container, false)
+        postView = view
+        app = activity!!.application as MainApp
         info { "Post Activity Started" }
 
-        mPostToolbar.title = getString(R.string.post)
-        setSupportActionBar(mPostToolbar)
+        view.mPostToolbar.title = getString(R.string.post)
+        postView.mPostToolbar.title = getString(R.string.locations_marker)
+        (activity as AppCompatActivity?)!!.setSupportActionBar(postView.mPostToolbar)
+        setHasOptionsMenu(true)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        val postModel = PostFragmentArgs.fromBundle(arguments!!).postModel
 
-        if(intent.hasExtra("landmark_edit")){
+        if(postModel.title != ""){
             info { "Editing Landmark" }
-            postModel = intent.extras?.getParcelable<PostModel>("landmark_edit")!!
             mPostTitle.setText(postModel.title)
             mPostDescription.setText(postModel.description)
             mPostSelectCountry.text = postModel.country
-            val viewPager = findViewById<ViewPager>(R.id.mPostViewPager)
+            val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             imageList.addAll(postModel.images)
-            val adapter = ImageAdapter(
-                this,
-                postModel.images
-            )
+            val adapter = ImageAdapter(view.context, postModel.images)
             viewPager.adapter = adapter
             editingPost = true
             mPostButton.text = getString(R.string.save)
             mPostDelete.visibility = View.VISIBLE
         }
 
-        mPostSelectCountry.setOnClickListener {
+        postView.mPostSelectCountry.setOnClickListener {
             info { "Select Country Started" }
-            val dataAdapter = DataAdapter(
-                app.landmarks.getCountryData(),
-                this
-            )
-            customDialog = CustomDialog(
-                this,
-                dataAdapter,
-                app.landmarks,
-                this
-            )
+            val dataAdapter = DataAdapter(app.landmarks.getCountryData(), this)
+            customDialog = CustomDialog(activity!!, dataAdapter, app.landmarks, this)
 
             customDialog.show()
             customDialog.setCanceledOnTouchOutside(false)
         }
 
-        mPostDelete.setOnClickListener {
+        postView.mPostDelete.setOnClickListener {
             doAsync {
                 app.landmarks.delete(postModel)
                 info { "Delete Landmark $postModel" }
                 onComplete {
-                    setResult(Activity.RESULT_OK)
-                    finish()
+                    view.findNavController().navigateUp()
                 }
             }
         }
+
         var date = String()
         //sets the date of the calender when changed.
-        mPostVisited.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
+        postView.mPostVisited.setOnDateChangeListener(CalendarView.OnDateChangeListener(){
                 view, year, month, dayOfMonth ->
             date = "$dayOfMonth/$month/$year"
         })
 
-//      Updates or creates a post
-        mPostButton.setOnClickListener {
+        //      Updates or creates a post
+        postView.mPostButton.setOnClickListener {
             info { "Posting Landmark" }
             postModel.images = ArrayList()
             postModel.title = mPostTitle.text.toString()
@@ -105,7 +104,7 @@ class PostActivity : AppCompatActivity(),AnkoLogger, CountryListener {
             (postModel.images as ArrayList<String>).addAll(imageList)
             if (postModel.title.isNotEmpty() && postModel.images.isNotEmpty()){
                 doAsync {
-//                  Update editing landmark
+                    //                  Update editing landmark
                     if (editingPost) {
                         app.landmarks.update(postModel.copy())
                     } else {
@@ -113,42 +112,23 @@ class PostActivity : AppCompatActivity(),AnkoLogger, CountryListener {
                     }
                     onComplete {
                         info { "Created Landmark: ${postModel}" }
-                        setResult(Activity.RESULT_OK)
-                        finish()
+                        view.findNavController().navigateUp()
                     }
                 }
             }else{
-                toast("Please Fill in an image and a title")
+                info("Please Fill in an image and a title")
             }
         }
 
 //      Open image gallery
-        mPostSelectImage.setOnClickListener {
-            showImagePicker(this, IMAGE_REQUEST)
+        view.mPostSelectImage.setOnClickListener {
+            showImagePicker(activity!!, IMAGE_REQUEST)
         }
-    }
-
-//  Back button Pressed
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-    }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            IMAGE_REQUEST -> {
-                info { "Image Request" }
-                if (data != null){
-                    imageList.add(data.data.toString())
-                    val viewPager = findViewById<ViewPager>(R.id.mPostViewPager)
-                    val adapter = ImageAdapter(this, imageList)
-                    viewPager.adapter = adapter
-                }
-            }
-        }
+        return view
     }
+
 
     override fun onCountryClick(string: String) {
         info { "Country Clicked" }
