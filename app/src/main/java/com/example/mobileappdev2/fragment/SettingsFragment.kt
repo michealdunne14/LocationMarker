@@ -23,10 +23,10 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_settings, container, false)
 
-        view.mSettingsPosts.text = "Total Posts ${app.landmarks.findPosts().size}"
+//        view.mSettingsPosts.text = "Total Posts ${app.fireStore.findPosts().size}"
 
         val likedPosts = ArrayList<PostModel>()
-        for (post in app.landmarks.findPosts()){
+        for (post in app.fireStore.findPosts()){
             if (post.postLiked){
                 likedPosts.add(post)
             }

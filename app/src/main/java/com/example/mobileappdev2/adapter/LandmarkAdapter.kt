@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.animation.Bounce
+import com.example.mobileappdev2.firebase.FireStore
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.room.MemoryStoreRoom
 import kotlinx.android.synthetic.main.card_list.view.*
@@ -20,7 +21,7 @@ interface LandmarkListener{
 class LandmarkAdapter(
     private var landmarks: List<PostModel>,
     private val listener: LandmarkListener,
-    private val memoryStore: MemoryStoreRoom
+    private val memoryStore: FireStore
 ) : RecyclerView.Adapter<LandmarkAdapter.MainHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -44,7 +45,7 @@ class LandmarkAdapter(
         fun bind(
             postModel: PostModel,
             listener: LandmarkListener,
-            memoryStore: MemoryStoreRoom
+            memoryStore: FireStore
         ) {
             itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description

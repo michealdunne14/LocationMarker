@@ -48,7 +48,7 @@ class HomeFragment : Fragment(),
         view.mLandmarkList.layoutManager = layoutManager as RecyclerView.LayoutManager?
 //      Get all Landmarks and add it to an adapter
         doAsync {
-            homeView.mLandmarkList.adapter = LandmarkAdapter(app.landmarks.findAll(), this@HomeFragment,app.landmarks)
+            homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment,app.fireStore)
         }
 
 //      Filtering items by either likes or all
@@ -63,7 +63,7 @@ class HomeFragment : Fragment(),
         }
 
 //      Get all countries and add it to an arraylist
-        app.landmarks.preparedata()
+//        app.fireStore.preparedata()
 
         homeView.mSearchFloatingActionButton.setOnClickListener {
             info { "Floating action Button" }
@@ -73,9 +73,9 @@ class HomeFragment : Fragment(),
                 cancelFilter()
                 homeView.mLandmarkList.adapter =
                     LandmarkAdapter(
-                        app.landmarks.findPosts(),
+                        app.fireStore.findPosts(),
                         this@HomeFragment,
-                        app.landmarks
+                        app.fireStore
                     )
                 homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
@@ -89,12 +89,12 @@ class HomeFragment : Fragment(),
             }
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchedLandmarks = app.landmarks.search(characterSearch,filter)
+                val searchedLandmarks = app.fireStore.search(characterSearch,filter)
                 homeView.mLandmarkList.adapter =
                     LandmarkAdapter(
                         searchedLandmarks,
                         this@HomeFragment,
-                        app.landmarks
+                        app.fireStore
                     )
                 homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
@@ -138,9 +138,9 @@ class HomeFragment : Fragment(),
         doAsync {
             homeView.mLandmarkList.adapter =
                 LandmarkAdapter(
-                    app.landmarks.findAll(),
+                    app.fireStore.findAll(),
                     this@HomeFragment,
-                    app.landmarks
+                    app.fireStore
                 )
         }
         homeView.mLandmarkList.adapter?.notifyDataSetChanged()

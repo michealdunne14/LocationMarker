@@ -7,12 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.activity.MainActivity
+import com.example.mobileappdev2.base.BaseView
+import com.example.mobileappdev2.firebase.FireStore
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 
-class LoginFragment : Fragment() {
+class LoginFragmentView : BaseView(),AnkoLogger {
 
+
+    lateinit var presenter: LoginFragmentPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,11 +29,12 @@ class LoginFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view=  inflater.inflate(R.layout.fragment_login, container, false)
-
+        presenter = initPresenter(LoginFragmentPresenter(this)) as LoginFragmentPresenter
 
         view.mLoginSignInButton.setOnClickListener {
-            startActivity(Intent(context, MainActivity::class.java))
-            activity!!.finish()
+            val email = view.mLoginEmail.text.toString()
+            val password = view.mLoginPassword.text.toString()
+            presenter.doLogin(email,password)
         }
 
         view.mRegisterReturnButton.setOnClickListener {

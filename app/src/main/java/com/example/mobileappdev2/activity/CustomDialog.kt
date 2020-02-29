@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
+import com.example.mobileappdev2.firebase.FireStore
 import com.example.mobileappdev2.room.MemoryStoreRoom
 import kotlinx.android.synthetic.main.activity_custom.*
 import org.jetbrains.anko.AnkoLogger
@@ -20,7 +21,7 @@ import org.jetbrains.anko.info
 class CustomDialog(
     var activity: FragmentActivity,
     internal var adapter: RecyclerView.Adapter<*>,
-    private var landmarks: MemoryStoreRoom,
+    private var landmarks: FireStore,
     private val listener: CountryListener
 ) : Dialog(activity),AnkoLogger{
 

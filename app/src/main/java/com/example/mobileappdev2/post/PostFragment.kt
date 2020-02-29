@@ -67,8 +67,8 @@ class PostFragment : Fragment(), AnkoLogger, CountryListener {
 
         postView.mPostSelectCountry.setOnClickListener {
             info { "Select Country Started" }
-            val dataAdapter = DataAdapter(app.landmarks.getCountryData(), this)
-            customDialog = CustomDialog(activity!!, dataAdapter, app.landmarks, this)
+            val dataAdapter = DataAdapter(app.fireStore.getCountryData(), this)
+            customDialog = CustomDialog(activity!!, dataAdapter, app.fireStore, this)
 
             customDialog.show()
             customDialog.setCanceledOnTouchOutside(false)
@@ -76,7 +76,7 @@ class PostFragment : Fragment(), AnkoLogger, CountryListener {
 
         postView.mPostDelete.setOnClickListener {
             doAsync {
-                app.landmarks.delete(postModel)
+                app.fireStore.delete(postModel)
                 info { "Delete Landmark $postModel" }
                 onComplete {
                     view.findNavController().navigateUp()
@@ -106,9 +106,9 @@ class PostFragment : Fragment(), AnkoLogger, CountryListener {
                 doAsync {
                     //                  Update editing landmark
                     if (editingPost) {
-                        app.landmarks.update(postModel.copy())
+                        app.fireStore.update(postModel.copy())
                     } else {
-                        app.landmarks.create(postModel.copy())
+                        app.fireStore.create(postModel.copy())
                     }
                     onComplete {
                         info { "Created Landmark: ${postModel}" }
