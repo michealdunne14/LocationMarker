@@ -8,17 +8,13 @@ import androidx.navigation.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
-import com.example.mobileappdev2.activity.PostActivity
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.adapter.TabsPagerAdapter
 import com.example.mobileappdev2.models.PostModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_layout.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivityForResult
 
 
 class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {

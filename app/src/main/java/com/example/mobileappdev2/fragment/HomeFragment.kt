@@ -9,16 +9,13 @@ import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileappdev2.MainApp
-import com.example.mobileappdev2.activity.PostActivity
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.models.PostModel
-import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.mLandmarkList
@@ -45,6 +42,7 @@ class HomeFragment : Fragment(),
         info { "Home Fragment Started" }
         app = activity!!.application as MainApp
         val layoutManager = LinearLayoutManager(view.context)
+
         view.mLandmarkList.layoutManager = layoutManager as RecyclerView.LayoutManager?
 //      Get all Landmarks and add it to an adapter
         doAsync {
@@ -63,7 +61,9 @@ class HomeFragment : Fragment(),
         }
 
 //      Get all countries and add it to an arraylist
-//        app.fireStore.preparedata()
+        doAsync {
+            app.fireStore.preparedata()
+        }
 
         homeView.mSearchFloatingActionButton.setOnClickListener {
             info { "Floating action Button" }
@@ -149,7 +149,7 @@ class HomeFragment : Fragment(),
 
     override fun onLandMarkClick(postModel: PostModel) {
         info{ "Landmark Clicked"}
-        startActivityForResult(context?.intentFor<PostActivity>()!!.putExtra("landmark_edit",postModel), 0)
+//        startActivityForResult(context?.intentFor<PostActivity>()!!.putExtra("landmark_edit",postModel), 0)
     }
 
 }

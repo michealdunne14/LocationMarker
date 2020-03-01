@@ -27,7 +27,8 @@ class RegisterView : BaseView(),AnkoLogger {
         presenter = initPresenter(RegisterPresenter(this)) as RegisterPresenter
 
         view.mRegisterSignupButton.setOnClickListener {
-            presenter.doRegister(view.mRegisterEmail.text.toString(),view.mRegisterPassword.text.toString())
+            val name = view.mRegisterFirstname.text.toString() + " " + view.mRegisterSurname.text.toString()
+            presenter.doRegister(view.mRegisterEmail.text.toString(),view.mRegisterPassword.text.toString(),name)
         }
 
 

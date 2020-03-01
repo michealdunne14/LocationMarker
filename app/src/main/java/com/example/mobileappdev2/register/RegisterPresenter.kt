@@ -13,13 +13,13 @@ class RegisterPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     var user = UserModel()
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun doRegister(email: String, password: String) {
+    fun doRegister(email: String, password: String, name: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-//                user.name = name
-//                user.email = email
-//                user.password = password
-//                app.fireStore.createUsers(user)
+                user.name = name
+                user.email = email
+                user.password = password
+                app.fireStore.createUsers(user)
                 view.gotoMainPageFromRegister()
             } else {
                 view.activity?.toast("Sign Up Failed: ${task.exception?.message}")

@@ -1,4 +1,8 @@
 package com.example.mobileappdev2.models
 
-class UserModel {
-}
+data class UserModel (
+    var fbId: String = "",
+    var email: String = "",
+    var password: String = "",
+    var name: String = ""
+)

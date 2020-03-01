@@ -2,12 +2,13 @@ package com.example.mobileappdev2.json
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.example.mobileappdev2.interfacestore.PostStore
+import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.helper.exists
 import com.example.mobileappdev2.helper.read
 import com.example.mobileappdev2.helper.write
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.models.UserModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -16,7 +17,7 @@ import org.jetbrains.anko.info
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MemoryStore(val context: Context): PostStore,AnkoLogger {
+class MemoryStore(val context: Context): InfoStore,AnkoLogger {
 
     val landmarks = ArrayList<PostModel>()
     var countries = arrayListOf<Country>()
@@ -117,6 +118,10 @@ class MemoryStore(val context: Context): PostStore,AnkoLogger {
 
     override fun getCountryData(): ArrayList<Country> {
         return countries
+    }
+
+    override fun createUsers(userModel: UserModel) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun preparedata() {

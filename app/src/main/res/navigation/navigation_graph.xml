@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/postFragment"
-        android:name="com.example.mobileappdev2.post.PostFragment"
+        android:name="com.example.mobileappdev2.post.PostView"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" >
         <argument

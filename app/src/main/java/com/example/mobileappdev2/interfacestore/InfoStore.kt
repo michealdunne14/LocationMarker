@@ -2,8 +2,9 @@ package com.example.mobileappdev2.interfacestore
 
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.models.UserModel
 
-interface PostStore {
+interface InfoStore {
     fun findAll(): List<PostModel>
     fun findPosts(): List<PostModel>
     fun searchCountries(query: CharSequence?): ArrayList<Country>
@@ -13,4 +14,5 @@ interface PostStore {
     fun search(query: CharSequence?, filter: Boolean): ArrayList<PostModel>
     fun preparedata()
     fun getCountryData(): ArrayList<Country>
+    fun createUsers(userModel: UserModel)
 }

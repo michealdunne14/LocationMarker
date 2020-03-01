@@ -6,8 +6,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import com.example.mobileappdev2.base.BaseView
 
-fun showImagePicker(parent: Activity, id: Int) {
+fun showImagePicker(parent: BaseView, id: Int) {
     val intent = Intent()
     intent.type = "image/*"
     intent.action = Intent.ACTION_OPEN_DOCUMENT
