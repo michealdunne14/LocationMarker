@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
@@ -55,17 +58,26 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
         val postModel = PostViewArgs.fromBundle(arguments!!).postModel
 
-        if(postModel.title != ""){
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                NavHostFragment.findNavController(this@PostView).navigateUp()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this, onBackPressedCallback
+        )
+
+        if(postModel.title.isNotEmpty()){
             info { "Editing Landmark" }
-            mPostTitle.setText(postModel.title)
-            mPostDescription.setText(postModel.description)
-            mPostSelectCountry.text = postModel.country
+            view.mPostTitle.setText(postModel.title)
+            view.mPostDescription.setText(postModel.description)
+            view.mPostSelectCountry.text = postModel.country
             val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             val adapter = ImageAdapter(view.context, postModel.images)
             viewPager.adapter = adapter
             editingPost = true
-            mPostButton.text = getString(R.string.save)
-            mPostDelete.visibility = View.VISIBLE
+            view.mPostButton.text = getString(R.string.save)
+            view.mPostDelete.visibility = View.VISIBLE
         }
 
         postView.mPostSelectCountry.setOnClickListener {
@@ -104,12 +116,12 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             if (date != "") {
                 postModel.datevisted = date
             }
-            postModel.images = presenter.findAllImages() as ArrayList<String>
             if (postModel.title.isNotEmpty()){
                 doAsync {
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {
+                        postModel.images = presenter.findAllImages() as ArrayList<String>
                         app.fireStore.create(postModel.copy())
                     }
                     onComplete {

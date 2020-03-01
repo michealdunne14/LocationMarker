@@ -9,6 +9,7 @@ import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileappdev2.MainApp
@@ -16,6 +17,7 @@ import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.mLandmarkList
@@ -24,13 +26,16 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
 
-class HomeFragment : Fragment(),
-    LandmarkListener,AnkoLogger {
+class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
 
     lateinit var app : MainApp
     lateinit var homeView: View
     var search = false
     var filter = false
+
+    companion object {
+        fun newInstance() = HomeFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,6 +103,12 @@ class HomeFragment : Fragment(),
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment, app.fireStore)
+        homeView.mLandmarkList.adapter?.notifyDataSetChanged()
+    }
+
 //  Show Search Filter
     private fun showFilter(){
         search = true
@@ -128,23 +139,12 @@ class HomeFragment : Fragment(),
         TransitionManager.beginDelayedTransition(fragment_home, transition)
         constraintSet.applyTo(fragment_home)  //here constraint is the name of view to which we are applying the constraintSet
     }
-// When
-    override fun onResume() {
-        doAsync {
-            homeView.mLandmarkList.adapter =
-                LandmarkAdapter(
-                    app.fireStore.findAll(),
-                    this@HomeFragment,
-                    app.fireStore
-                )
-        }
-        homeView.mLandmarkList.adapter?.notifyDataSetChanged()
-        super.onResume()
-    }
+
 
     override fun onLandMarkClick(postModel: PostModel) {
         info{ "Landmark Clicked"}
-//        startActivityForResult(context?.intentFor<PostActivity>()!!.putExtra("landmark_edit",postModel), 0)
+        val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
+        homeView.findNavController().navigate(action)
     }
 
 }

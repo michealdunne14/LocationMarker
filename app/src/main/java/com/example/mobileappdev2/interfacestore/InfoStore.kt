@@ -16,4 +16,5 @@ interface InfoStore {
     fun createUsers(userModel: UserModel)
     fun updateFavourite(postModel: PostModel)
     fun updateLike(postModel: PostModel)
+    fun currentUser(): UserModel
 }

@@ -11,4 +11,9 @@
         android:icon="@drawable/outline_home_black_36"
         android:title="Main" />
 
+    <item
+        android:id="@+id/mNavFavourite"
+        android:icon="@drawable/baseline_star_black_36"
+        android:title="Favourite" />
+
 </menu>

@@ -19,6 +19,7 @@ import kotlin.collections.ArrayList
 class FireStore(val context: Context): InfoStore, AnkoLogger {
 
     val posts = ArrayList<PostModel>()
+    val favourites = ArrayList<PostModel>()
     var db: DatabaseReference = FirebaseDatabase.getInstance().reference
     var user: UserModel = UserModel()
     var countries = arrayListOf<Country>()
@@ -26,7 +27,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
-    override fun findAll(): List<PostModel> {
+    override fun findAll(): ArrayList<PostModel> {
         return posts
     }
 
@@ -39,7 +40,24 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                 postsReady()
             }
         }
-        db.child("users").child(userId).child("posts").addValueEventListener(valueEventListener)
+        db.child("users").child(userId).child("posts").addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    fun fetchFavourites(favouritesReady: () -> Unit){
+        val reference = FirebaseDatabase.getInstance().reference
+        val query = reference.child("users").child(userId).child("posts")
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (posts in dataSnapshot.children) {
+                    if (posts.child("favourite").value == true) {
+                        favourites.add(posts.getValue<PostModel>(PostModel::class.java)!!)
+                    }
+                }
+                favouritesReady()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     override fun searchCountries(query: CharSequence?): ArrayList<Country> {
@@ -51,12 +69,19 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         key?.let {
             postModel.fbId = key
             updateImage(postModel)
-            posts.add(postModel)
         }
     }
 
     override fun update(postModel: PostModel) {
-
+        val foundPost: PostModel? = posts.find { p -> p.fbId == postModel.fbId }
+        if (foundPost != null) {
+            foundPost.title = postModel.title
+            foundPost.country = postModel.country
+            foundPost.datevisted = postModel.datevisted
+            foundPost.description = postModel.description
+            foundPost.images = postModel.images
+        }
+        db.child("users").child(userId).child("posts").child(foundPost!!.fbId).setValue(foundPost)
     }
 
     override fun updateFavourite(postModel: PostModel) {
@@ -74,6 +99,10 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
             user = userModel
             db.child("users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(userModel)
         }
+    }
+
+    override fun currentUser(): UserModel{
+        return user
     }
 
     fun updateImage(postModel: PostModel) {
@@ -101,6 +130,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                             postModel.images.add(it.toString())
                             if (postModel.images.size == postImageArrayList.size) {
                                 db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
+                                posts.add(postModel)
                             }
                         }
                     }

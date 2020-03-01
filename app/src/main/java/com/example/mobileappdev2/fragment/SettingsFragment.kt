@@ -14,6 +14,10 @@ class SettingsFragment : Fragment() {
 
     lateinit var app : MainApp
 
+    companion object {
+        fun newInstance() = SettingsFragment()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -63,6 +63,9 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
                     1 -> {
                         pagerView.bottomNavigationView.selectedItemId = R.id.mNavHome
                     }
+                    2 -> {
+                        pagerView.bottomNavigationView.selectedItemId = R.id.mNavFavourite
+                    }
                     else -> pagerView.bottomNavigationView.selectedItemId = R.id.mNavHome
                 }
             }
@@ -81,6 +84,10 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
             }
             R.id.mNavHome -> {
                 pagerView.mMainPager.currentItem = 1
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.mNavFavourite -> {
+                pagerView.mMainPager.currentItem = 2
                 return@OnNavigationItemSelectedListener true
             }
         }

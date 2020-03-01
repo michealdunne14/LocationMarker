@@ -26,9 +26,6 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
-//                    doAsync {
-//                        fireStore.findCurrentUser()
-//                    }
                     app.fireStore.fetchPosts {
                         view.gotoMainPage()
                     }
