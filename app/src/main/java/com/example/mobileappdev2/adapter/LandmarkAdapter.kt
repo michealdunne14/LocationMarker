@@ -10,7 +10,6 @@ import com.example.mobileappdev2.R
 import com.example.mobileappdev2.animation.Bounce
 import com.example.mobileappdev2.firebase.FireStore
 import com.example.mobileappdev2.models.PostModel
-import com.example.mobileappdev2.room.MemoryStoreRoom
 import kotlinx.android.synthetic.main.card_list.view.*
 import org.jetbrains.anko.doAsync
 
@@ -21,7 +20,7 @@ interface LandmarkListener{
 class LandmarkAdapter(
     private var landmarks: List<PostModel>,
     private val listener: LandmarkListener,
-    private val memoryStore: FireStore
+    private val fireStore: FireStore
 ) : RecyclerView.Adapter<LandmarkAdapter.MainHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -38,20 +37,22 @@ class LandmarkAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val landmark = landmarks[holder.adapterPosition]
-        holder.bind(landmark,listener,memoryStore)
+        holder.bind(landmark,listener,fireStore)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(
             postModel: PostModel,
             listener: LandmarkListener,
-            memoryStore: FireStore
+            fireStore: FireStore
         ) {
             itemView.mCardName.text = postModel.title
             itemView.mCardDescription.text = postModel.description
             itemView.mCardCountry.text = "Country Visited:${postModel.country}"
             itemView.mCardDate.text = "Date Visited: ${postModel.datevisted}"
+
             var visitedCheck = postModel.postLiked
+            var favouriteCheck = postModel.favourite
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
             val adapter = ImageAdapter(
                 itemView.context,
@@ -66,6 +67,37 @@ class LandmarkAdapter(
                 itemView.mCardLikeButton.setImageResource(R.drawable.baseline_thumb_up_black_36)
             }else{
                 itemView.mCardLikeButton.setImageResource(R.drawable.outline_thumb_up_black_36)
+            }
+
+            if (favouriteCheck){
+                itemView.mCardFavouriteButton.setImageResource(R.drawable.baseline_star_black_36)
+            }else{
+                itemView.mCardFavouriteButton.setImageResource(R.drawable.baseline_star_border_black_36)
+            }
+
+            itemView.mCardFavouriteButton.setOnClickListener {
+                favouriteCheck = !favouriteCheck
+//              Trigger animation when liking a post.
+                if (favouriteCheck) {
+                    val myAnim = AnimationUtils.loadAnimation(itemView.context,
+                        R.anim.bounce
+                    )
+                    val interpolator = Bounce(0.2, 20.0)
+                    myAnim.interpolator = interpolator
+                    itemView.mCardFavouriteButton.startAnimation(myAnim)
+                    itemView.mCardFavouriteButton.setImageResource(R.drawable.baseline_star_black_36)
+                    postModel.favourite = true
+                }else{
+                    val myAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.bounce)
+                    val interpolator = Bounce(0.2, 20.0)
+                    myAnim.interpolator = interpolator
+                    itemView.mCardFavouriteButton.startAnimation(myAnim)
+                    itemView.mCardFavouriteButton.setImageResource(R.drawable.baseline_star_border_black_36)
+                    postModel.favourite = false
+                }
+                doAsync {
+                    fireStore.updateFavourite(postModel.copy())
+                }
             }
 
             itemView.mCardLikeButton.setOnClickListener {
@@ -92,7 +124,7 @@ class LandmarkAdapter(
                     postModel.postLiked = false
                 }
                 doAsync {
-                    memoryStore.update(postModel.copy())
+                    fireStore.updateLike(postModel.copy())
                 }
             }
         }

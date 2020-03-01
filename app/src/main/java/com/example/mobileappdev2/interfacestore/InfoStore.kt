@@ -6,7 +6,6 @@ import com.example.mobileappdev2.models.UserModel
 
 interface InfoStore {
     fun findAll(): List<PostModel>
-    fun findPosts(): List<PostModel>
     fun searchCountries(query: CharSequence?): ArrayList<Country>
     fun create(postModel: PostModel)
     fun update(postModel: PostModel)
@@ -15,4 +14,6 @@ interface InfoStore {
     fun preparedata()
     fun getCountryData(): ArrayList<Country>
     fun createUsers(userModel: UserModel)
+    fun updateFavourite(postModel: PostModel)
+    fun updateLike(postModel: PostModel)
 }

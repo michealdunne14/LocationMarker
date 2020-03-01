@@ -71,12 +71,7 @@ class HomeFragment : Fragment(),
                 showFilter()
             }else{
                 cancelFilter()
-                homeView.mLandmarkList.adapter =
-                    LandmarkAdapter(
-                        app.fireStore.findPosts(),
-                        this@HomeFragment,
-                        app.fireStore
-                    )
+                homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment, app.fireStore)
                 homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
         }

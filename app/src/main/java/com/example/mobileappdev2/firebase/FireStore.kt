@@ -2,7 +2,6 @@ package com.example.mobileappdev2.firebase
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.core.net.toUri
 import com.example.mobileappdev2.helper.readImageFromPath
 import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.models.Country
@@ -11,7 +10,6 @@ import com.example.mobileappdev2.models.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.AnkoLogger
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -29,10 +27,6 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
 
 
     override fun findAll(): List<PostModel> {
-        return posts
-    }
-
-    override fun findPosts(): List<PostModel> {
         return posts
     }
 
@@ -62,7 +56,15 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     }
 
     override fun update(postModel: PostModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    }
+
+    override fun updateFavourite(postModel: PostModel) {
+        db.child("users").child(userId).child("posts").child(postModel.fbId).child("favourite").setValue(postModel.favourite)
+    }
+
+    override fun updateLike(postModel: PostModel) {
+        db.child("users").child(userId).child("posts").child(postModel.fbId).child("postLiked").setValue(postModel.postLiked)
     }
 
     override fun createUsers(userModel: UserModel){

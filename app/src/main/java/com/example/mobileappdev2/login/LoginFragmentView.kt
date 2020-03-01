@@ -46,8 +46,10 @@ class LoginFragmentView : BaseView(),AnkoLogger {
     }
 
     override fun gotoMainPage(){
-        this.startActivity(Intent(loginView.context, MainActivity::class.java))
-        this.activity!!.finish()
+        if (activity != null) {
+            startActivity(Intent(loginView.context, MainActivity::class.java))
+            activity!!.finish()
+        }
     }
 
 }

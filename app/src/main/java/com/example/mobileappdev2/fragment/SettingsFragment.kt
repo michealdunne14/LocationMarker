@@ -26,7 +26,7 @@ class SettingsFragment : Fragment() {
 //        view.mSettingsPosts.text = "Total Posts ${app.fireStore.findPosts().size}"
 
         val likedPosts = ArrayList<PostModel>()
-        for (post in app.fireStore.findPosts()){
+        for (post in app.fireStore.findAll()){
             if (post.postLiked){
                 likedPosts.add(post)
             }
