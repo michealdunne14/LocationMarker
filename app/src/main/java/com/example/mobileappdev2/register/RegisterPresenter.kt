@@ -20,7 +20,9 @@ class RegisterPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                 user.email = email
                 user.password = password
                 app.fireStore.createUsers(user)
-                view.gotoMainPageFromRegister()
+                app.fireStore.fetchPosts {
+                    view.gotoMainPageFromRegister()
+                }
             } else {
                 view.activity?.toast("Sign Up Failed: ${task.exception?.message}")
             }

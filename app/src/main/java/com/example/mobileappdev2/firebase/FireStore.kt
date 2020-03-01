@@ -9,8 +9,7 @@ import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.models.UserModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.AnkoLogger
@@ -26,6 +25,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     var user: UserModel = UserModel()
     var countries = arrayListOf<Country>()
     var st = FirebaseStorage.getInstance().reference
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
     override fun findAll(): List<PostModel> {
@@ -34,6 +34,18 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
 
     override fun findPosts(): List<PostModel> {
         return posts
+    }
+
+    fun fetchPosts(postsReady: () -> Unit) {
+        val valueEventListener = object : ValueEventListener {
+            override fun onCancelled(dataSnapshot: DatabaseError) {
+            }
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.children.mapNotNullTo(posts) { it.getValue<PostModel>(PostModel::class.java) }
+                postsReady()
+            }
+        }
+        db.child("users").child(userId).child("posts").addValueEventListener(valueEventListener)
     }
 
     override fun searchCountries(query: CharSequence?): ArrayList<Country> {
@@ -86,7 +98,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                         taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
                             postModel.images.add(it.toString())
                             if (postModel.images.size == postImageArrayList.size) {
-                                db.child("users").child(user.fbId).child("posts").child(postModel.fbId).setValue(postModel)
+                                db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
                             }
                         }
                     }

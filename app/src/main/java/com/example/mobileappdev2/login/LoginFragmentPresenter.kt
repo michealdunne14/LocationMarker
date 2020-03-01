@@ -29,9 +29,9 @@ class LoginFragmentPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 //                    doAsync {
 //                        fireStore.findCurrentUser()
 //                    }
-//                    fireStore.fetchHillforts {
+                    app.fireStore.fetchPosts {
                         view.gotoMainPage()
-//                    }
+                    }
                 } else {
 //                  If user does not exist then send appropriate error
                     view.activity?.toast("Sign In Failed: ${it.exception?.message}")
