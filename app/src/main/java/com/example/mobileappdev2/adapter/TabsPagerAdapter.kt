@@ -3,7 +3,7 @@ package com.example.mobileappdev2.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.mobileappdev2.favourite.FavouriteFragment
+import com.example.mobileappdev2.favourite.FavouriteFragmentView
 import com.example.mobileappdev2.fragment.HomeFragment
 import com.example.mobileappdev2.fragment.SettingsFragment
 
@@ -17,7 +17,7 @@ class TabsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 return HomeFragment.newInstance()
             }
             2 -> {
-                return FavouriteFragment.newInstance()
+                return FavouriteFragmentView.newInstance()
             }
             else -> return HomeFragment()
         }

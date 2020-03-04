@@ -21,7 +21,11 @@ class ImageAdapter(private val mContext: Context,private val imageList: List<Str
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imageView = ImageView(mContext)
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-        Glide.with(mContext).load(imageList[position]).into(imageView)
+        if (imageList[position].contains("https://firebasestorage")) {
+            Glide.with(mContext).load(imageList[position]).into(imageView)
+        }else{
+            imageView.setImageBitmap(readImageFromPath(mContext,imageList[position]))
+        }
         container.addView(imageView,0)
         return imageView
     }

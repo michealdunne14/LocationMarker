@@ -7,9 +7,13 @@ import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.models.UserModel
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.AnkoLogger
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -24,6 +28,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     var user: UserModel = UserModel()
     var countries = arrayListOf<Country>()
     var st = FirebaseStorage.getInstance().reference
+    var storage = FirebaseStorage.getInstance()
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
@@ -69,6 +74,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         key?.let {
             postModel.fbId = key
             updateImage(postModel)
+            posts.add(postModel)
         }
     }
 
@@ -85,6 +91,11 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     }
 
     override fun updateFavourite(postModel: PostModel) {
+        if(postModel.favourite){
+            favourites.add(postModel)
+        }else{
+            favourites.remove(postModel)
+        }
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("favourite").setValue(postModel.favourite)
     }
 
@@ -130,7 +141,6 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                             postModel.images.add(it.toString())
                             if (postModel.images.size == postImageArrayList.size) {
                                 db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
-                                posts.add(postModel)
                             }
                         }
                     }
@@ -140,11 +150,21 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     }
 
     override fun delete(postModel: PostModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        db.child("users").child(userId).child("posts").child(postModel.fbId).removeValue()
+        for(image in postModel.images) {
+            val photoRef: StorageReference = storage.getReferenceFromUrl(image)
+            photoRef.delete().addOnSuccessListener {
+                println("File deleted ")
+            }.addOnFailureListener {
+                // Uh-oh, an error occurred!
+                println("File not deleted")
+            }
+        }
+        posts.remove(postModel)
     }
 
     override fun search(query: CharSequence?, filter: Boolean): ArrayList<PostModel> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return posts
     }
 
     override fun preparedata() {

@@ -1,16 +1,12 @@
 package com.example.mobileappdev2.post
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -22,12 +18,9 @@ import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
 import com.example.mobileappdev2.adapter.ImageAdapter
 import com.example.mobileappdev2.base.BaseView
-import com.example.mobileappdev2.helper.showImagePicker
 import com.example.mobileappdev2.models.PostModel
-import com.example.mobileappdev2.register.RegisterPresenter
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
-import kotlinx.android.synthetic.main.main_layout.view.*
 import org.jetbrains.anko.*
 
 class PostView : BaseView(), AnkoLogger, CountryListener {
@@ -74,6 +67,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             view.mPostSelectCountry.text = postModel.country
             val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             val adapter = ImageAdapter(view.context, postModel.images)
+            presenter.setImageArrayListToPostModel(postModel)
             viewPager.adapter = adapter
             editingPost = true
             view.mPostButton.text = getString(R.string.save)
@@ -141,6 +135,12 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
 
         return view
+    }
+
+    override fun setImages(imageArrayList: ArrayList<String>) {
+        val viewPager = postView.findViewById<ViewPager>(R.id.mPostViewPager)
+        val adapter = ImageAdapter(postView.context, imageArrayList)
+        viewPager.adapter = adapter
     }
 
 

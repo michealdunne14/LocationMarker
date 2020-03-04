@@ -30,7 +30,7 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
         val view =  inflater.inflate(R.layout.fragment_pager, container, false)
         pagerView = view
         //      Tabs pager adapter setup
-        pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
+        pagerAdapter = TabsPagerAdapter(childFragmentManager)
         info { "Main Activity Started" }
         app = activity!!.application as MainApp
 
@@ -92,11 +92,6 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
             }
         }
         false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        pagerAdapter = TabsPagerAdapter(activity!!.supportFragmentManager)
     }
 
     //  Start activity for result of selected post.
