@@ -22,4 +22,9 @@ open abstract class BaseView: Fragment(), AnkoLogger {
     open fun gotoMainPage(){}
     open fun gotoMainPageFromRegister(){}
     open fun setImages(imageArrayList: ArrayList<String>) {}
+    open fun setLocation(
+        landmarkName: String,
+        latitude: Double,
+        longitude: Double
+    ) {}
 }

@@ -61,6 +61,13 @@
                 android:layout_marginTop="10dp"
                 android:hint="Title" />
 
+            <TextView
+                android:id="@+id/mPostLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="TextView" />
+
             <EditText
                 android:id="@+id/mPostDescription"
                 android:layout_width="match_parent"

@@ -9,12 +9,12 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity
 data class PostModel(@PrimaryKey(autoGenerate = true) var id: Long = 0,
-                     var title: String = "",
                      var fbId: String = "",
                      var description: String = "",
                      var country: String = "",
                      var datevisted: String = "",
                      var postLiked: Boolean = false,
                      var favourite: Boolean = false,
-                     var images: ArrayList<String> = ArrayList()
+                     var images: ArrayList<String> = ArrayList(),
+                     var locations: ArrayList<Location> = ArrayList()
 ): Parcelable

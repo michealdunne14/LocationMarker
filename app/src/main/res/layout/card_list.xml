@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/mCardImageList"
@@ -37,9 +37,9 @@
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_below="@id/mCardName"
-            app:autoSizeTextType="uniform"
             android:text="Description"
             android:textSize="20sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/mCardDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,10 +56,20 @@
 
         <TextView
             android:id="@+id/mCardDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Date"
+            app:layout_constraintBottom_toTopOf="@+id/mCardLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/mCardLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/mCardLikeButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton

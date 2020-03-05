@@ -7,12 +7,9 @@ import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.models.UserModel
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.AnkoLogger
 import java.io.ByteArrayOutputStream
@@ -81,7 +78,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     override fun update(postModel: PostModel) {
         val foundPost: PostModel? = posts.find { p -> p.fbId == postModel.fbId }
         if (foundPost != null) {
-            foundPost.title = postModel.title
+//            foundPost.titles = postModel.titles
             foundPost.country = postModel.country
             foundPost.datevisted = postModel.datevisted
             foundPost.description = postModel.description

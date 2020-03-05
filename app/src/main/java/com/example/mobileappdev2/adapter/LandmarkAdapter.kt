@@ -11,6 +11,7 @@ import com.example.mobileappdev2.animation.Bounce
 import com.example.mobileappdev2.firebase.FireStore
 import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.card_list.view.*
+import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.doAsync
 
 interface LandmarkListener{
@@ -46,7 +47,27 @@ class LandmarkAdapter(
             listener: LandmarkListener,
             fireStore: FireStore
         ) {
-            itemView.mCardName.text = postModel.title
+            itemView.mCardImageList.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    itemView.mCardName.text = postModel.locations[position].title
+                    itemView.mCardLocation.text = "${postModel.locations[position].latitude}  ${postModel.locations[position].longitude}"
+                }
+
+            })
+
+            itemView.mCardName.text = postModel.locations[0].title
+            itemView.mCardLocation.text = "${postModel.locations[0].latitude}  ${postModel.locations[0].longitude}"
             itemView.mCardDescription.text = postModel.description
             itemView.mCardCountry.text = "Country Visited:${postModel.country}"
             itemView.mCardDate.text = "Date Visited: ${postModel.datevisted}"
@@ -54,10 +75,7 @@ class LandmarkAdapter(
             var visitedCheck = postModel.postLiked
             var favouriteCheck = postModel.favourite
             val viewPager = itemView.findViewById<ViewPager>(R.id.mCardImageList)
-            val adapter = ImageAdapter(
-                itemView.context,
-                postModel.images
-            )
+            val adapter = ImageAdapter(itemView.context, postModel.images)
             viewPager.adapter = adapter
             itemView.setOnClickListener {
                 listener.onLandMarkClick(postModel)

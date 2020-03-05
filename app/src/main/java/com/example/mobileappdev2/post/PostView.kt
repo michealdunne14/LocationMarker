@@ -18,13 +18,14 @@ import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
 import com.example.mobileappdev2.adapter.ImageAdapter
 import com.example.mobileappdev2.base.BaseView
+import com.example.mobileappdev2.models.Location
 import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.*
 
 class PostView : BaseView(), AnkoLogger, CountryListener {
-    var postModel = PostModel()
+    var post = PostModel()
     lateinit var app : MainApp
     var editingPost = false
     lateinit var customDialog: CustomDialog
@@ -60,11 +61,32 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             this, onBackPressedCallback
         )
 
-        if(postModel.title.isNotEmpty()){
+        view.mPostViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                view.mPostTitle.setText(post.locations[position].title)
+                view.mPostLocation.text = "${post.locations[position].latitude}  ${post.locations[position].longitude}"
+            }
+
+        })
+
+        if(postModel.country.isNotEmpty()){
             info { "Editing Landmark" }
-            view.mPostTitle.setText(postModel.title)
+            view.mPostTitle.setText(postModel.locations[0].title)
             view.mPostDescription.setText(postModel.description)
             view.mPostSelectCountry.text = postModel.country
+            post = postModel
+            view.mPostLocation.text = "${postModel.locations[0].latitude}  ${postModel.locations[0].longitude}"
             val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             val adapter = ImageAdapter(view.context, postModel.images)
             presenter.setImageArrayListToPostModel(postModel)
@@ -104,18 +126,18 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         postView.mPostButton.setOnClickListener {
             info { "Posting Landmark" }
             postModel.images = ArrayList()
-            postModel.title = mPostTitle.text.toString()
             postModel.description = mPostDescription.text.toString()
             postModel.country = mPostSelectCountry.text.toString()
             if (date != "") {
                 postModel.datevisted = date
             }
-            if (postModel.title.isNotEmpty()){
+            if (postModel.country.isNotEmpty()){
                 doAsync {
+                    postModel.images = presenter.findAllImages() as ArrayList<String>
+                    postModel.locations = presenter.findLocations() as ArrayList<Location>
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {
-                        postModel.images = presenter.findAllImages() as ArrayList<String>
                         app.fireStore.create(postModel.copy())
                     }
                     onComplete {
@@ -138,6 +160,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
     }
 
     override fun setImages(imageArrayList: ArrayList<String>) {
+        post.locations = presenter.findLocations() as ArrayList<Location>
         val viewPager = postView.findViewById<ViewPager>(R.id.mPostViewPager)
         val adapter = ImageAdapter(postView.context, imageArrayList)
         viewPager.adapter = adapter
@@ -146,9 +169,14 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
     override fun onCountryClick(string: String) {
         info { "Country Clicked" }
-        postModel.country = string
+        post.country = string
         mPostSelectCountry.text = string
         customDialog.dismiss()
+    }
+
+    override fun setLocation(landmarkName: String, latitude: Double, longitude: Double) {
+        postView.mPostTitle.setText(landmarkName)
+        postView.mPostLocation.text = "latitude $latitude, longitude $longitude"
     }
 
 
