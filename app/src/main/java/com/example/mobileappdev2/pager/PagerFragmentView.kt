@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.pager
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -105,6 +106,10 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
         when (item.itemId) {
             R.id.item_add -> {
                 val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(PostModel())
+                pagerView.findNavController().navigate(action)
+            }
+            R.id.item_map -> {
+                val action = PagerFragmentViewDirections.actionPagerFragmentViewToMapFragment()
                 pagerView.findNavController().navigate(action)
             }
         }

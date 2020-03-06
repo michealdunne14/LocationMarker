@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.post
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.*
+import java.lang.Exception
 
 class PostView : BaseView(), AnkoLogger, CountryListener {
     var post = PostModel()
@@ -32,6 +34,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
     lateinit var presenter: PostPresenter
 
     lateinit var postView: View
+    lateinit var dialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,8 +77,13 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             }
 
             override fun onPageSelected(position: Int) {
-                view.mPostTitle.setText(post.locations[position].title)
-                view.mPostLocation.text = "${post.locations[position].latitude}  ${post.locations[position].longitude}"
+                try {
+                    view.mPostTitle.setText(post.locations[position].title)
+                    view.mPostLocation.text =
+                        "${post.locations[position].latitude}  ${post.locations[position].longitude}"
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
             }
 
         })
@@ -138,11 +146,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {
-                        app.fireStore.create(postModel.copy())
-                    }
-                    onComplete {
-                        info { "Created Landmark: ${postModel}" }
-                        view.findNavController().navigateUp()
+                        app.fireStore.create(postModel.copy(),view)
                     }
                 }
             }else{
@@ -164,6 +168,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         val viewPager = postView.findViewById<ViewPager>(R.id.mPostViewPager)
         val adapter = ImageAdapter(postView.context, imageArrayList)
         viewPager.adapter = adapter
+        dialog.dismiss()
     }
 
 
@@ -183,6 +188,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null) {
+            dialog = ProgressDialog.show(context, "","Loading. Please wait...",true )
             presenter.doActivityResult(requestCode, resultCode, data, postView.context)
         }
 

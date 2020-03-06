@@ -17,6 +17,9 @@
                 android:name="postModel"
                 app:argType="com.example.mobileappdev2.models.PostModel"/>
         </action>
+        <action
+            android:id="@+id/action_pagerFragmentView_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -27,4 +30,9 @@
             android:name="postModel"
             app:argType="com.example.mobileappdev2.models.PostModel"/>
     </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.mobileappdev2.maps.MapView"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

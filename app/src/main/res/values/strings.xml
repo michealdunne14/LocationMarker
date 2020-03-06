@@ -9,4 +9,5 @@
     <string name="filter_by_likes">Filtering By Likes</string>
     <string name="filter_all">Filtering All</string>
     <string name="search">Search</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.post
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import com.example.mobileappdev2.MainApp
@@ -54,12 +55,14 @@ class PostPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
                             val latitude = loc.latitude
                             val longitude = loc.longitude
                             view.setLocation(landmarkName,latitude,longitude)
-                            locationArrayList.add(Location(landmarkName,latitude,latitude))
-                            view.setImages(imageArrayList)
+                            locationArrayList.add(Location(landmarkName,latitude,longitude))
                             break
                         }
                         break
                     }
+                }
+                .addOnCompleteListener{ task ->
+                    view.setImages(imageArrayList)
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception

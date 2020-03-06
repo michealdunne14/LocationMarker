@@ -50,9 +50,6 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
 
         view.mLandmarkList.layoutManager = layoutManager as RecyclerView.LayoutManager?
 //      Get all Landmarks and add it to an adapter
-        doAsync {
-            homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment,app.fireStore)
-        }
 
 //      Filtering items by either likes or all
         homeView.mFilteringItems.setOnClickListener {
@@ -76,8 +73,6 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
                 showFilter()
             }else{
                 cancelFilter()
-                homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment, app.fireStore)
-                homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
         }
 

@@ -2,11 +2,14 @@ package com.example.mobileappdev2.firebase
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.view.View
+import androidx.navigation.findNavController
 import com.example.mobileappdev2.helper.readImageFromPath
 import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.models.UserModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -66,11 +69,11 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun create(postModel: PostModel) {
+    override fun create(postModel: PostModel, view: View) {
         val key = db.child("users").child(user.fbId).child("posts").push().key
         key?.let {
             postModel.fbId = key
-            updateImage(postModel)
+            updateImage(postModel,view)
             posts.add(postModel)
         }
     }
@@ -113,7 +116,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         return user
     }
 
-    fun updateImage(postModel: PostModel) {
+    fun updateImage(postModel: PostModel, view: View) {
         val postImageArrayList = ArrayList<String>()
         postImageArrayList.addAll(postModel.images)
         postModel.images.clear()
@@ -138,6 +141,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                             postModel.images.add(it.toString())
                             if (postModel.images.size == postImageArrayList.size) {
                                 db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
+                                view.findNavController().navigateUp()
                             }
                         }
                     }

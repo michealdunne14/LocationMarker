@@ -58,5 +58,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
 }
