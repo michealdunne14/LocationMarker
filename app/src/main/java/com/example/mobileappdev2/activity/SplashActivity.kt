@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity(),AnkoLogger {
 
         info { "Splash Screen Started" }
 
-        if (app.fireStore.userId.isEmpty()){
+        if (app.fireStore.currentUserId().isEmpty()){
             startActivity(Intent(baseContext, LoginActivity::class.java))
             finish()
         }else{

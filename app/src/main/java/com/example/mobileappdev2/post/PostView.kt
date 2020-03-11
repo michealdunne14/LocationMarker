@@ -21,7 +21,11 @@ import com.example.mobileappdev2.adapter.ImageAdapter
 import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.Location
 import com.example.mobileappdev2.models.PostModel
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.fragment_map.view.*
 import kotlinx.android.synthetic.main.fragment_post.view.*
 import org.jetbrains.anko.*
 import java.lang.Exception
@@ -35,6 +39,8 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
     lateinit var postView: View
     lateinit var dialog: ProgressDialog
+    lateinit var map: GoogleMap
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +58,14 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         postView.mPostToolbar.title = getString(R.string.locations_marker)
         (activity as AppCompatActivity?)!!.setSupportActionBar(postView.mPostToolbar)
         setHasOptionsMenu(true)
+        view.mPostMap.onCreate(savedInstanceState)
+
+
+        //      Sets up map
+        view.mPostMap.getMapAsync {
+            map = it
+            presenter.initMap(map)
+        }
 
         val postModel = PostViewArgs.fromBundle(arguments!!).postModel
 
@@ -79,8 +93,8 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             override fun onPageSelected(position: Int) {
                 try {
                     view.mPostTitle.setText(post.locations[position].title)
-                    view.mPostLocation.text =
-                        "${post.locations[position].latitude}  ${post.locations[position].longitude}"
+                    val loc = LatLng(post.locations[position].latitude, post.locations[position].longitude)
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15F))
                 }catch (e : Exception){
                     e.printStackTrace()
                 }
@@ -94,7 +108,6 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             view.mPostDescription.setText(postModel.description)
             view.mPostSelectCountry.text = postModel.country
             post = postModel
-            view.mPostLocation.text = "${postModel.locations[0].latitude}  ${postModel.locations[0].longitude}"
             val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             val adapter = ImageAdapter(view.context, postModel.images)
             presenter.setImageArrayListToPostModel(postModel)
@@ -142,7 +155,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             if (postModel.country.isNotEmpty()){
                 doAsync {
                     postModel.images = presenter.findAllImages() as ArrayList<String>
-                    postModel.locations = presenter.findLocations() as ArrayList<Location>
+                    postModel.locations = presenter.findLocations(map) as ArrayList<Location>
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {
@@ -164,7 +177,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
     }
 
     override fun setImages(imageArrayList: ArrayList<String>) {
-        post.locations = presenter.findLocations() as ArrayList<Location>
+        post.locations = presenter.findLocations(map) as ArrayList<Location>
         val viewPager = postView.findViewById<ViewPager>(R.id.mPostViewPager)
         val adapter = ImageAdapter(postView.context, imageArrayList)
         viewPager.adapter = adapter
@@ -181,7 +194,6 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
     override fun setLocation(landmarkName: String, latitude: Double, longitude: Double) {
         postView.mPostTitle.setText(landmarkName)
-        postView.mPostLocation.text = "latitude $latitude, longitude $longitude"
     }
 
 
@@ -191,6 +203,30 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             dialog = ProgressDialog.show(context, "","Loading. Please wait...",true )
             presenter.doActivityResult(requestCode, resultCode, data, postView.context)
         }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        postView.mPostMap.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        postView.mPostMap.onLowMemory()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        postView.mPostMap.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        postView.mPostMap.onResume()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        postView.mPostMap.onSaveInstanceState(outState)
     }
 }

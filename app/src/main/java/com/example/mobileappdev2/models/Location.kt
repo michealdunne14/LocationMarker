@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity
 data class Location (
-    val title: String = "",
-    val latitude: Double = 0.0,
-    val longitude: Double = 0.0
+    var title: String = "",
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 ): Parcelable

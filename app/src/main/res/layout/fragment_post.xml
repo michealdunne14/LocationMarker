@@ -61,12 +61,13 @@
                 android:layout_marginTop="10dp"
                 android:hint="Title" />
 
-            <TextView
-                android:id="@+id/mPostLocation"
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mPostMap"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="TextView" />
+                android:layout_height="180dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/mPostDescription"

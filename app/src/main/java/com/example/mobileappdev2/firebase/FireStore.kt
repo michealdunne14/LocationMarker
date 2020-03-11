@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference
 import org.jetbrains.anko.AnkoLogger
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,11 +30,20 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     var countries = arrayListOf<Country>()
     var st = FirebaseStorage.getInstance().reference
     var storage = FirebaseStorage.getInstance()
-    val userId = FirebaseAuth.getInstance().currentUser!!.uid
+    var userId = ""
 
 
     override fun findAll(): ArrayList<PostModel> {
         return posts
+    }
+
+    fun currentUserId(): String {
+        try {
+            userId = FirebaseAuth.getInstance().currentUser!!.uid
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+        return userId
     }
 
     fun fetchPosts(postsReady: () -> Unit) {
