@@ -155,7 +155,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             if (postModel.country.isNotEmpty()){
                 doAsync {
                     postModel.images = presenter.findAllImages() as ArrayList<String>
-                    postModel.locations = presenter.findLocations(map) as ArrayList<Location>
+                    postModel.locations = presenter.locationArray()
                     if (editingPost) {
                         app.fireStore.update(postModel.copy())
                     } else {

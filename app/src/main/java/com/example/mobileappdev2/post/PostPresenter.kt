@@ -130,4 +130,8 @@ class PostPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
         }
         return locationArrayList
     }
+
+    fun locationArray(): ArrayList<Location> {
+        return locationArrayList
+    }
 }

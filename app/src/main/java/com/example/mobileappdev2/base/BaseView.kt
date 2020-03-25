@@ -1,6 +1,8 @@
 package com.example.mobileappdev2.base
 
 import androidx.fragment.app.Fragment
+import com.example.mobileappdev2.models.Location
+import com.example.mobileappdev2.models.PostModel
 import org.jetbrains.anko.AnkoLogger
 
 enum class VIEW {
@@ -23,4 +25,9 @@ open abstract class BaseView: Fragment(), AnkoLogger {
     open fun gotoMainPageFromRegister(){}
     open fun setImages(imageArrayList: ArrayList<String>) {}
     open fun setLocation(landmarkName: String, latitude: Double, longitude: Double) {}
+    open fun markerLocations(
+        location: Location,
+        post: PostModel,
+        index: Int
+    ) {}
 }

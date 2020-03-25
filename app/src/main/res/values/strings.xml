@@ -10,4 +10,6 @@
     <string name="filter_all">Filtering All</string>
     <string name="search">Search</string>
     <string name="title_activity_maps">Map</string>
+    <string name="cancel">Cancel</string>
+    <string name="locations_on_maps">Locations on Maps</string>
 </resources>

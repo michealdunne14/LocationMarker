@@ -4,6 +4,7 @@ import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.base.BasePresenter
 import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.firebase.FireStore
+import com.example.mobileappdev2.models.Location
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +26,7 @@ class MapsPresenter(view: BaseView): BasePresenter(view) {
     }
 
     fun findLocations(map: GoogleMap){
-        val findPosts = fireStore.findAll()
+        val findPosts = fireStore.findFavourites()
         findPosts.forEach { postModel ->
             postModel.locations.forEach {
                 val loc = LatLng(it.latitude, it.longitude)
@@ -34,5 +35,18 @@ class MapsPresenter(view: BaseView): BasePresenter(view) {
                 map.moveCamera(CameraUpdateFactory.newLatLng(loc))
             }
         }
+    }
+
+    fun doMarkerClick(title: String?): Location? {
+        val findPosts = fireStore.findFavourites()
+        var location: Location?
+        for (post in findPosts){
+            location = post.locations.find { p -> p.title == title }
+            val index = post.locations.indexOf(location)
+            if(location != null){
+                view.markerLocations(location,post,index)
+            }
+        }
+        return null
     }
 }

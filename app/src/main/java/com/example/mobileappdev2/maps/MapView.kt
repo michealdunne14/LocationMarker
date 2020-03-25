@@ -1,20 +1,30 @@
 package com.example.mobileappdev2.maps
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.R
+import com.example.mobileappdev2.adapter.ImageAdapter
+import com.example.mobileappdev2.adapter.ImageAdapterMap
 import com.example.mobileappdev2.base.BaseView
+import com.example.mobileappdev2.models.Location
+import com.example.mobileappdev2.models.PostModel
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.fragment_map.view.*
+import java.lang.Exception
 
-class MapView : BaseView() {
+class MapView : BaseView(),GoogleMap.OnMarkerClickListener {
 
     lateinit var map: GoogleMap
     lateinit var mapView: View
-
     lateinit var presenter: MapsPresenter
+    var postModel = PostModel()
+
 
 
 
@@ -34,7 +44,36 @@ class MapView : BaseView() {
         view.mapView.getMapAsync {
             map = it
             presenter.initMap(map)
+            map.setOnMarkerClickListener(this)
         }
+        mapView.mMapToolbar.title = getString(R.string.locations_on_maps)
+
+        (activity as AppCompatActivity?)!!.setSupportActionBar(mapView.mMapToolbar)
+        setHasOptionsMenu(true)
+
+        mapView.mMapViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                try {
+                    mapView.mMapName.text = postModel.locations[position].title
+                    val loc = LatLng(postModel.locations[position].latitude, postModel.locations[position].longitude)
+                    map.moveCamera(CameraUpdateFactory.newLatLng(loc))
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
+            }
+
+        })
 
         return view
     }
@@ -62,6 +101,38 @@ class MapView : BaseView() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        presenter.doMarkerClick(marker.title)
+        return false
+    }
+
+    override fun markerLocations(
+        location: Location,
+        post: PostModel,
+        index: Int
+    ) {
+        mapView.mMapName.text = location.title
+        mapView.mMapDescription.text = post.description
+        postModel = post
+        val viewPager = mapView.findViewById<ViewPager>(R.id.mMapViewPager)
+        val adapter = ImageAdapterMap(mapView.context, post.images[index])
+        viewPager.adapter = adapter
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_cancel -> {
+                mapView.findNavController().navigateUp()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.return_menu,menu)
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
 }

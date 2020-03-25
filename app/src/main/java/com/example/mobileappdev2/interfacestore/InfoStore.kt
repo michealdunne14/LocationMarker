@@ -18,4 +18,5 @@ interface InfoStore {
     fun updateFavourite(postModel: PostModel)
     fun updateLike(postModel: PostModel)
     fun currentUser(): UserModel
+    fun findFavourites(): ArrayList<PostModel>
 }

@@ -37,6 +37,10 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         return posts
     }
 
+    override fun findFavourites(): ArrayList<PostModel> {
+        return favourites
+    }
+
     fun currentUserId(): String {
         try {
             userId = FirebaseAuth.getInstance().currentUser!!.uid
@@ -76,7 +80,13 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     }
 
     override fun searchCountries(query: CharSequence?): ArrayList<Country> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val searchedPosts = ArrayList<Country>()
+        for(country in countries){
+            if (country.countryName.toUpperCase().contains(query!!)){
+                searchedPosts.add(country)
+            }
+        }
+        return searchedPosts
     }
 
     override fun create(postModel: PostModel, view: View) {
@@ -104,6 +114,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         if(postModel.favourite){
             favourites.add(postModel)
         }else{
+            postModel.favourite = true
             favourites.remove(postModel)
         }
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("favourite").setValue(postModel.favourite)
