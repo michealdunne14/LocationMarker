@@ -12,6 +12,7 @@ import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.base.BaseView
+import com.example.mobileappdev2.getNavOptions
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import com.example.mobileappdev2.register.RegisterPresenter
@@ -54,7 +55,7 @@ class FavouriteFragmentView : BaseView(), AnkoLogger, LandmarkListener {
     override fun onLandMarkClick(postModel: PostModel) {
         info{ "Landmark Clicked"}
         val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
-        favouriteView.findNavController().navigate(action)
+        favouriteView.findNavController().navigate(action, getNavOptions())
     }
 
 }

@@ -16,6 +16,7 @@ import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
+import com.example.mobileappdev2.getNavOptions
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -85,12 +86,7 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchedLandmarks = app.fireStore.search(characterSearch,filter)
-                homeView.mLandmarkList.adapter =
-                    LandmarkAdapter(
-                        searchedLandmarks,
-                        this@HomeFragment,
-                        app.fireStore
-                    )
+                homeView.mLandmarkList.adapter = LandmarkAdapter(searchedLandmarks, this@HomeFragment, app.fireStore)
                 homeView.mLandmarkList.adapter?.notifyDataSetChanged()
             }
 
@@ -139,7 +135,7 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
     override fun onLandMarkClick(postModel: PostModel) {
         info{ "Landmark Clicked"}
         val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
-        homeView.findNavController().navigate(action)
+        homeView.findNavController().navigate(action, getNavOptions())
     }
 
 }

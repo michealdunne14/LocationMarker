@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.example.mobileappdev2.R
+import com.example.mobileappdev2.getNavOptions
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
@@ -22,12 +23,12 @@ class StartFragment : Fragment() {
 
         view.mStartLogin.setOnClickListener {
             val action = StartFragmentDirections.actionStartFragmentToLoginFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigate(action, getNavOptions())
         }
 
         view.mStartRegister.setOnClickListener {
             val action = StartFragmentDirections.actionStartFragmentToRegisterFragment()
-            view.findNavController().navigate(action)
+            view.findNavController().navigate(action,getNavOptions())
         }
 
         return view
