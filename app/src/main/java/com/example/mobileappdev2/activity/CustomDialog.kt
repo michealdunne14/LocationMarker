@@ -6,20 +6,22 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
+import com.example.mobileappdev2.firebase.FireStore
 import com.example.mobileappdev2.room.MemoryStoreRoom
 import kotlinx.android.synthetic.main.activity_custom.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
 class CustomDialog(
-    var activity: Activity,
+    var activity: FragmentActivity,
     internal var adapter: RecyclerView.Adapter<*>,
-    private var landmarks: MemoryStoreRoom,
+    private var landmarks: FireStore,
     private val listener: CountryListener
 ) : Dialog(activity),AnkoLogger{
 

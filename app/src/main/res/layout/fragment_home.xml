@@ -18,8 +18,9 @@
             android:id="@+id/mHomeSearch"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/border"
             android:ems="10"
-            android:hint="Search By Name"
+            android:hint="@string/search_by_name"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mFilteringItems"
@@ -30,10 +31,14 @@
             android:id="@+id/mFilteringItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filtering All"
+            android:background="@drawable/greybutton"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/filtering_all"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

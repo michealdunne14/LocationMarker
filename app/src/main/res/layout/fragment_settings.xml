@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.SettingsFragment">
+    tools:context=".fragment.settings.SettingsView">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,14 +15,36 @@
             android:id="@+id/mSettingsPosts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="35dp"
-            android:text="Posts" />
+            android:textSize="@dimen/dimension35"
+            android:text="@string/posts" />
 
         <TextView
             android:id="@+id/mSettingsLiked"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="35dp"
-            android:text="LikedPosts" />
+            android:textSize="@dimen/dimension35"
+            android:text="@string/likedposts" />
+
+        <TextView
+            android:id="@+id/mSettingsFavourites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimension35"
+            android:text="@string/favourite" />
+
+        <TextView
+            android:id="@+id/mSettingsUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimension35"
+            android:text="@string/total_users" />
+
+        <Button
+            android:id="@+id/mLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/redbutton"
+            android:textColor="@color/colorWhite"
+            android:text="@string/logout" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

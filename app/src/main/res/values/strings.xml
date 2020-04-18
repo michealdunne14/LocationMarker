@@ -9,4 +9,17 @@
     <string name="filter_by_likes">Filtering By Likes</string>
     <string name="filter_all">Filtering All</string>
     <string name="search">Search</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="cancel">Cancel</string>
+    <string name="locations_on_maps">Locations on Maps</string>
+    <string name="sign_in_google">Sign In with Google</string>
+    <string name="sign_in_email">Sign In with Email</string>
+    <string name="sign_in_phone">Sign In with Phone</string>
+    <string name="posts">Posts</string>
+    <string name="likedposts">LikedPosts</string>
+    <string name="logout">Logout</string>
+    <string name="search_by_name">Search By Name</string>
+    <string name="filtering_all">Filtering all</string>
+    <string name="favourite">Favourite</string>
+    <string name="total_users">Total Users</string>
 </resources>

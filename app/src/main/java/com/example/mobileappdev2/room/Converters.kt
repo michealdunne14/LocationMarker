@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.room
 
+import android.graphics.Bitmap
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
