@@ -10,7 +10,7 @@ interface InfoStore {
     fun findAll(): List<PostModel>
     fun searchCountries(query: CharSequence?): ArrayList<Country>
     fun create(postModel: PostModel, view: View)
-    fun update(postModel: PostModel)
+    fun update(postModel: PostModel,view: View)
     fun delete(postModel: PostModel)
     fun search(query: CharSequence?, filter: Boolean, view: BaseView)
     fun preparedata()

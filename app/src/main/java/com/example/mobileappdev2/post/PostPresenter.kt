@@ -1,8 +1,11 @@
 package com.example.mobileappdev2.post
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.base.BasePresenter
 import com.example.mobileappdev2.base.BaseView
@@ -20,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import org.jetbrains.anko.AnkoLogger
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PostPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     override var app : MainApp = view.activity?.application as MainApp
@@ -30,6 +35,7 @@ class PostPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     var postModel = PostModel()
     var locationService: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.context!!)
     var defaultLocation = Location("",52.245696, -7.139102)
+
 
 
     fun selectImages(){
@@ -59,37 +65,58 @@ class PostPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
     fun searchLandmark(imageArrayList: ArrayList<String>) {
         locationArrayList.clear()
         for(imageString in imageArrayList){
-            val bitmap = readImageFromPath(view.context!!, imageString)
-            val image = FirebaseVisionImage.fromBitmap(bitmap!!)
-            val detector = FirebaseVision.getInstance().visionCloudLandmarkDetector
-            val result = detector.detectInImage(image)
-            result.addOnSuccessListener { firebaseVisionCloudLandmarks ->
-                    for (landmark in firebaseVisionCloudLandmarks) {
-                        val confidence = landmark.confidence
-                        val landmarkName = landmark.landmark
-
-                        for (loc in landmark.locations) {
-                            val latitude = loc.latitude
-                            val longitude = loc.longitude
-                            view.setLocation(landmarkName,latitude,longitude)
-                            locationArrayList.add(Location(landmarkName,latitude,longitude))
-                            break
-                        }
-                        break
+            lateinit var bitmap: Bitmap
+            if(imageString.contains("https://firebasestorage.googleapis")){
+                Glide.with(view.context!!).asBitmap().load(imageString).into(object : CustomTarget<Bitmap>(){
+                    override fun onLoadCleared(placeholder: Drawable?) {
                     }
-                }
-                .addOnCompleteListener{ task ->
-                    view.setImages(imageArrayList)
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    // ...
-                }
+
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        bitmap = resource
+                        loadingImages(bitmap)
+                    }
+                })
+            }else{
+                bitmap = readImageFromPath(view.context!!, imageString)!!
+                loadingImages(bitmap)
+            }
         }
     }
 
+    fun loadingImages(bitmap: Bitmap) {
+        val image = FirebaseVisionImage.fromBitmap(bitmap)
+        val detector = FirebaseVision.getInstance().visionCloudLandmarkDetector
+        val result = detector.detectInImage(image)
+        result.addOnSuccessListener { firebaseVisionCloudLandmarks ->
+            for (landmark in firebaseVisionCloudLandmarks) {
+                val confidence = landmark.confidence
+                val landmarkName = landmark.landmark
 
-    fun findAllImages(): List<String> {
+                for (loc in landmark.locations) {
+                    val latitude = loc.latitude
+                    val longitude = loc.longitude
+                    view.setLocation(landmarkName,latitude,longitude)
+                    locationArrayList.add(Location(landmarkName,latitude,longitude))
+                    locationArrayList.reverse()
+                    break
+                }
+                break
+            }
+        }
+            .addOnCompleteListener{ task ->
+                view.setImages(imageArrayList)
+            }
+            .addOnFailureListener { e ->
+                // Task failed with an exception
+                // ...
+            }
+    }
+
+
+    fun findAllImages(): ArrayList<String> {
         return imageArrayList
     }
 
