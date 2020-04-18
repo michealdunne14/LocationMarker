@@ -4,24 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".start.StartFragment">
+    tools:context=".start.StartView">
 
 
     <Button
-        android:id="@+id/mStartLogin"
+        android:id="@+id/emailSignInButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:text="Login"
-        app:layout_constraintBottom_toTopOf="@+id/mStartRegister"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/fui_idp_button_background_email"
+        android:drawableStart="@android:drawable/sym_action_email"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="@string/sign_in_email"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/phoneSignInButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--    <Button-->
+<!--        android:id="@+id/mStartRegister"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:text="Register"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <Button
+        android:id="@+id/googleSignInButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:drawableStart="@drawable/fui_ic_googleg_color_24dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="@string/sign_in_google"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/mStartRegister"
+        android:id="@+id/phoneSignInButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/fui_idp_button_background_phone"
+        android:drawableStart="@drawable/fui_ic_phone_white_24dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="@string/sign_in_phone"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/googleSignInButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -29,7 +75,7 @@
         android:id="@+id/mStartLogo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/mStartLogin"
+        app:layout_constraintBottom_toTopOf="@+id/emailSignInButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

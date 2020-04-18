@@ -3,23 +3,23 @@ package com.example.mobileappdev2.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.mobileappdev2.favourite.FavouriteFragmentView
-import com.example.mobileappdev2.fragment.HomeFragment
-import com.example.mobileappdev2.fragment.SettingsFragment
+import com.example.mobileappdev2.fragment.favourite.FavouriteFragmentView
+import com.example.mobileappdev2.fragment.home.HomeView
+import com.example.mobileappdev2.fragment.settings.SettingsView
 
 class TabsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> {
-                return SettingsFragment.newInstance()
+                return SettingsView.newInstance()
             }
             1 -> {
-                return HomeFragment.newInstance()
+                return HomeView.newInstance()
             }
             2 -> {
                 return FavouriteFragmentView.newInstance()
             }
-            else -> return HomeFragment()
+            else -> return HomeView()
         }
     }
 

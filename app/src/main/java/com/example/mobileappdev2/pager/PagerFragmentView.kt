@@ -1,7 +1,6 @@
 package com.example.mobileappdev2.pager
 
 import ZoomOutPageTransformer
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -12,7 +11,8 @@ import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkListener
 import com.example.mobileappdev2.adapter.TabsPagerAdapter
-import com.example.mobileappdev2.getNavOptions
+import com.example.mobileappdev2.animation.getNavOptions
+import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.PostModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_layout.view.*
@@ -20,7 +20,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
 
-class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
+class PagerFragmentView : BaseView(),AnkoLogger,LandmarkListener {
     lateinit var app : MainApp
     lateinit var pagerAdapter: TabsPagerAdapter
     lateinit var pagerView : View
@@ -102,18 +102,24 @@ class PagerFragmentView : Fragment(),AnkoLogger,LandmarkListener {
     override fun onLandMarkClick(postModel: PostModel) {
         info { "Landmark Clicked" }
         val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
-        pagerView.findNavController().navigate(action, getNavOptions())
+        pagerView.findNavController().navigate(action,
+            getNavOptions()
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_add -> {
                 val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(PostModel())
-                pagerView.findNavController().navigate(action, getNavOptions())
+                pagerView.findNavController().navigate(action,
+                    getNavOptions()
+                )
             }
             R.id.item_map -> {
                 val action = PagerFragmentViewDirections.actionPagerFragmentViewToMapFragment()
-                pagerView.findNavController().navigate(action,getNavOptions())
+                pagerView.findNavController().navigate(action,
+                    getNavOptions()
+                )
             }
         }
         return super.onOptionsItemSelected(item)

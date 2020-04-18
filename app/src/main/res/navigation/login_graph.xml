@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.mobileappdev2.start.StartFragment"
+        android:name="com.example.mobileappdev2.start.StartView"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action

@@ -1,4 +1,4 @@
-package com.example.mobileappdev2.fragment
+package com.example.mobileappdev2.fragment.home
 
 import android.os.Bundle
 import android.text.Editable
@@ -8,7 +8,6 @@ import android.transition.TransitionManager
 import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,26 +15,26 @@ import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.adapter.LandmarkAdapter
 import com.example.mobileappdev2.adapter.LandmarkListener
-import com.example.mobileappdev2.getNavOptions
+import com.example.mobileappdev2.animation.getNavOptions
+import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.pager.PagerFragmentViewDirections
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.mLandmarkList
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
 
-class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
+class HomeView : BaseView(), LandmarkListener,AnkoLogger {
 
     lateinit var app : MainApp
     lateinit var homeView: View
     var search = false
     var filter = false
+    lateinit var presenter: HomePresenter
 
     companion object {
-        fun newInstance() = HomeFragment()
+        fun newInstance() = HomeView()
     }
 
     override fun onCreateView(
@@ -44,6 +43,9 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_home, container, false)
+
+        presenter = initPresenter(HomePresenter(this)) as HomePresenter
+
         homeView = view
         info { "Home Fragment Started" }
         app = activity!!.application as MainApp
@@ -63,10 +65,7 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
             }
         }
 
-//      Get all countries and add it to an arraylist
-        doAsync {
-            app.fireStore.preparedata()
-        }
+        presenter.doPrepareData()
 
         homeView.mSearchFloatingActionButton.setOnClickListener {
             info { "Floating action Button" }
@@ -85,9 +84,7 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
             }
 
             override fun onTextChanged(characterSearch: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val searchedLandmarks = app.fireStore.search(characterSearch,filter)
-                homeView.mLandmarkList.adapter = LandmarkAdapter(searchedLandmarks, this@HomeFragment, app.fireStore)
-                homeView.mLandmarkList.adapter?.notifyDataSetChanged()
+                presenter.homeSearch(characterSearch,filter)
             }
 
         })
@@ -96,7 +93,11 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
 
     override fun onResume() {
         super.onResume()
-        homeView.mLandmarkList.adapter = LandmarkAdapter(app.fireStore.findAll(), this@HomeFragment, app.fireStore)
+        searchLandmarks(presenter.findAll())
+    }
+
+    override fun searchLandmarks(findSearchedPosts: ArrayList<PostModel>) {
+        homeView.mLandmarkList.adapter = LandmarkAdapter(findSearchedPosts, this@HomeView, presenter)
         homeView.mLandmarkList.adapter?.notifyDataSetChanged()
     }
 
@@ -129,13 +130,16 @@ class HomeFragment : Fragment(), LandmarkListener,AnkoLogger {
 
         TransitionManager.beginDelayedTransition(fragment_home, transition)
         constraintSet.applyTo(fragment_home)  //here constraint is the name of view to which we are applying the constraintSet
+        searchLandmarks(presenter.findAll())
     }
 
 
     override fun onLandMarkClick(postModel: PostModel) {
         info{ "Landmark Clicked"}
         val action = PagerFragmentViewDirections.actionPagerFragmentViewToPostFragment(postModel)
-        homeView.findNavController().navigate(action, getNavOptions())
+        homeView.findNavController().navigate(action,
+            getNavOptions()
+        )
     }
 
 }

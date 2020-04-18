@@ -1,21 +1,23 @@
-package com.example.mobileappdev2.fragment
+package com.example.mobileappdev2.fragment.settings
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mobileappdev2.MainApp
 import com.example.mobileappdev2.R
+import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
-class SettingsFragment : Fragment() {
+class SettingsView : BaseView() {
 
     lateinit var app : MainApp
+    lateinit var presenter: SettingsPresenter
 
     companion object {
-        fun newInstance() = SettingsFragment()
+        fun newInstance() =
+            SettingsView()
     }
 
     override fun onCreateView(
@@ -27,16 +29,16 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_settings, container, false)
 
-//        view.mSettingsPosts.text = "Total Posts ${app.fireStore.findPosts().size}"
+        presenter = initPresenter(SettingsPresenter(this)) as SettingsPresenter
 
-        val likedPosts = ArrayList<PostModel>()
-        for (post in app.fireStore.findAll()){
-            if (post.postLiked){
-                likedPosts.add(post)
-            }
+        view.mLogout.setOnClickListener {
+            presenter.doLogout(view)
         }
 
-        view.mSettingsLiked.text = "Liked Posts ${likedPosts.size}"
+        view.mSettingsLiked.text = "Liked Posts ${presenter.fireStore.totalLikes}"
+        view.mSettingsPosts.text = "Posts ${presenter.fireStore.totalPosts}"
+        view.mSettingsFavourites.text = "Favourite Posts ${presenter.fireStore.totalFavourites}"
+        view.mSettingsUsers.text = "Users ${presenter.fireStore.totalUsers}"
         return view
     }
 }

@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.R
 import com.example.mobileappdev2.animation.Bounce
-import com.example.mobileappdev2.firebase.FireStore
+import com.example.mobileappdev2.base.BasePresenter
 import com.example.mobileappdev2.models.PostModel
 import kotlinx.android.synthetic.main.card_list.view.*
-import kotlinx.android.synthetic.main.fragment_post.view.*
-import org.jetbrains.anko.doAsync
 
 interface LandmarkListener{
     fun onLandMarkClick(postModel: PostModel)
@@ -21,7 +19,7 @@ interface LandmarkListener{
 class LandmarkAdapter(
     private var landmarks: List<PostModel>,
     private val listener: LandmarkListener,
-    private val fireStore: FireStore
+    private val basePresenter: BasePresenter
 ) : RecyclerView.Adapter<LandmarkAdapter.MainHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -38,14 +36,14 @@ class LandmarkAdapter(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val landmark = landmarks[holder.adapterPosition]
-        holder.bind(landmark,listener,fireStore)
+        holder.bind(landmark,listener,basePresenter)
     }
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(
             postModel: PostModel,
             listener: LandmarkListener,
-            fireStore: FireStore
+            presenter: BasePresenter
         ) {
             itemView.mCardImageList.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
                 override fun onPageScrollStateChanged(state: Int) {
@@ -113,9 +111,7 @@ class LandmarkAdapter(
                     itemView.mCardFavouriteButton.setImageResource(R.drawable.baseline_star_border_black_36)
                     postModel.favourite = false
                 }
-                doAsync {
-                    fireStore.updateFavourite(postModel.copy())
-                }
+                presenter.updateFavourite(postModel.copy())
             }
 
             itemView.mCardLikeButton.setOnClickListener {
@@ -141,9 +137,7 @@ class LandmarkAdapter(
                     itemView.mCardLikeButton.setImageResource(R.drawable.outline_thumb_up_black_36)
                     postModel.postLiked = false
                 }
-                doAsync {
-                    fireStore.updateLike(postModel.copy())
-                }
+                presenter.updateLike(postModel.copy())
             }
         }
     }

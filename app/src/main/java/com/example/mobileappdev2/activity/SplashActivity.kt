@@ -21,14 +21,14 @@ class SplashActivity : AppCompatActivity(),AnkoLogger {
         info { "Splash Screen Started" }
 
         if (app.fireStore.currentUserId().isEmpty()){
-            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
             startActivity(Intent(baseContext, LoginActivity::class.java))
             finish()
         }else{
             app.fireStore.fetchFavourites{
             }
             app.fireStore.fetchPosts {
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right)
                 startActivity(Intent(baseContext, MainActivity::class.java))
                 finish()
             }
