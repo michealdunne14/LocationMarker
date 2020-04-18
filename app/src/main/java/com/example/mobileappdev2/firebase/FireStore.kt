@@ -39,12 +39,12 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     var totalFavourites: Long = 0
 
 
-//  Find all users posts
+    //  Find all users posts
     override fun findAll(): ArrayList<PostModel> {
         return posts
     }
 
-//  Find all favorites
+    //  Find all favorites
     override fun findFavourites(): ArrayList<PostModel> {
         return favourites
     }
@@ -58,7 +58,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         return userId
     }
 
-//  Fetch Posts belong to that user
+    //  Fetch Posts belong to that user
     fun fetchPosts(postsReady: () -> Unit) {
         val valueEventListener = object : ValueEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError) {
@@ -92,7 +92,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         db.child("users").addListenerForSingleValueEvent(statsValueEventListener)
     }
 
-//  Fetch all favourite posts
+    //  Fetch all favourite posts
     fun fetchFavourites(favouritesReady: () -> Unit){
         val reference = FirebaseDatabase.getInstance().reference
         val query = reference.child("users").child(userId).child("posts")
@@ -110,7 +110,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         })
     }
 
-//  Search by country
+    //  Search by country
     override fun searchCountries(query: CharSequence?): ArrayList<Country> {
         val searchedPosts = ArrayList<Country>()
         for(country in countries){
@@ -121,30 +121,30 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         return searchedPosts
     }
 
-//  Create a post and upload the images
+    //  Create a post and upload the images
     override fun create(postModel: PostModel, view: View) {
         val key = db.child("users").child(user.fbId).child("posts").push().key
         key?.let {
             postModel.fbId = key
-            updateImage(postModel,view)
+            updateImage(postModel, view, false)
             posts.add(postModel)
         }
     }
 
-//  Update the posts
-    override fun update(postModel: PostModel) {
+    //  Update the posts
+    override fun update(postModel: PostModel,view: View) {
         val foundPost: PostModel? = posts.find { p -> p.fbId == postModel.fbId }
         if (foundPost != null) {
 //            foundPost.titles = postModel.titles
             foundPost.country = postModel.country
             foundPost.datevisted = postModel.datevisted
             foundPost.description = postModel.description
-            foundPost.images = postModel.images
+            updateImage(postModel,view,true)
         }
         db.child("users").child(userId).child("posts").child(foundPost!!.fbId).setValue(foundPost)
     }
 
-//  Update the favorites List
+    //  Update the favorites List
     override fun updateFavourite(postModel: PostModel) {
         if(postModel.favourite){
             favourites.add(postModel)
@@ -155,11 +155,11 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("favourite").setValue(postModel.favourite)
     }
 
-//  Update Like
+    //  Update Like
     override fun updateLike(postModel: PostModel) {
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("postLiked").setValue(postModel.postLiked)
     }
-//  Clear data
+    //  Clear data
     fun clearData(){
         userId = ""
         posts.clear()
@@ -167,7 +167,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         user = UserModel()
     }
 
-//  Create a user
+    //  Create a user
     override fun createUsers(userModel: UserModel){
         val key:String? = db.child("users").push().key
         key?.let {
@@ -180,16 +180,27 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     override fun currentUser(): UserModel{
         return user
     }
-//  Get the firebase User
+    //  Get the firebase User
     fun fireBaseUser(user: FirebaseUser?): FirebaseUser? {
         return user
     }
-//  add image to post
-    fun updateImage(postModel: PostModel, view: View) {
+    //  add image to post
+    fun updateImage(
+        postModel: PostModel,
+        view: View,
+        update: Boolean
+    ) {
         val postImageArrayList = ArrayList<String>()
         postImageArrayList.addAll(postModel.images)
         postModel.images.clear()
-        for (image in postImageArrayList) {
+        val removingImage =ArrayList<String>()
+        for (image in postImageArrayList){
+            if (!image.contains("https://firebasestorage")){
+                removingImage.add(image)
+            }
+        }
+
+        removingImage.forEachIndexed { index, image ->
             if (image != "") {
                 val fileName = File(image)
                 val imageName = fileName.name
@@ -207,10 +218,22 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                         println(it)
                     }.addOnSuccessListener { taskSnapshot ->
                         taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                            postImageArrayList.add(it.toString())
                             postModel.images.add(it.toString())
-                            if (postModel.images.size == postImageArrayList.size) {
-                                db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
-                                view.findNavController().navigateUp()
+                            if (index == removingImage.size -1 ) {
+                                if (update){
+                                    val updateImage = ArrayList<String>()
+                                    for (findImage in postImageArrayList){
+                                        if (findImage.contains("https://firebasestorage.googleapis")){
+                                            updateImage.add(findImage)
+                                        }
+                                    }
+                                    db.child("users").child(userId).child("posts").child(postModel.fbId).child("images").setValue(updateImage)
+                                    view.findNavController().navigateUp()
+                                }else {
+                                    db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
+                                    view.findNavController().navigateUp()
+                                }
                             }
                         }
                     }
@@ -218,7 +241,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
             }
         }
     }
-//  Delete a post
+    //  Delete a post
     override fun delete(postModel: PostModel) {
         db.child("users").child(userId).child("posts").child(postModel.fbId).removeValue()
         for(image in postModel.images) {
@@ -232,12 +255,12 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
         }
         posts.remove(postModel)
     }
-//  Search for a posts
+    //  Search for a posts
     override fun search(
-    query: CharSequence?,
-    filter: Boolean,
-    view: BaseView
-) {
+        query: CharSequence?,
+        filter: Boolean,
+        view: BaseView
+    ) {
         searchedPosts.clear()
         val reference = FirebaseDatabase.getInstance().reference
         val postsSearch = reference.child("users").child(userId).child("posts")
@@ -264,7 +287,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     }
 
 
-//  add countries to an arraylist
+    //  add countries to an arraylist
     override fun preparedata() {
         for (countryCode in Locale.getISOCountries()) {
             val locale = Locale("",countryCode)

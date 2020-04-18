@@ -113,6 +113,8 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             presenter.setImageArrayListToPostModel(postModel)
             viewPager.adapter = adapter
             editingPost = true
+            dialog = ProgressDialog.show(context, "","Loading. Please wait...",true )
+            presenter.searchLandmark(presenter.findAllImages())
             view.mPostButton.text = getString(R.string.save)
             view.mPostDelete.visibility = View.VISIBLE
         }
@@ -154,10 +156,10 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
             }
             if (postModel.country.isNotEmpty()){
                 doAsync {
-                    postModel.images = presenter.findAllImages() as ArrayList<String>
+                    postModel.images = presenter.findAllImages()
                     postModel.locations = presenter.locationArray()
                     if (editingPost) {
-                        app.fireStore.update(postModel.copy())
+                        app.fireStore.update(postModel.copy(),view)
                     } else {
                         app.fireStore.create(postModel.copy(),view)
                     }
