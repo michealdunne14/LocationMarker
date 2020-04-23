@@ -22,4 +22,5 @@
     <string name="filtering_all">Filtering all</string>
     <string name="favourite">Favourite</string>
     <string name="total_users">Total Users</string>
+    <string name="filtering_favourites">Filtering Favourites</string>
 </resources>

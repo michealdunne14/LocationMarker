@@ -20,31 +20,59 @@ class MapsPresenter(view: BaseView): BasePresenter(view) {
         fireStore = app.fireStore as FireStore
     }
 
-    fun initMap(map: GoogleMap){
+    fun initMap(map: GoogleMap,filter: Boolean){
         map.uiSettings.isZoomControlsEnabled = true
-        findLocations(map)
+        findLocations(map, filter)
     }
 
-    fun findLocations(map: GoogleMap){
-        val findPosts = fireStore.findFavourites()
-        findPosts.forEach { postModel ->
-            postModel.locations.forEach {
-                val loc = LatLng(it.latitude, it.longitude)
-                val options = MarkerOptions().title(it.title).position(loc)
-                map.addMarker(options).tag = it
-                map.moveCamera(CameraUpdateFactory.newLatLng(loc))
+    fun findLocations(map: GoogleMap, filter: Boolean){
+        if (filter){
+            val findPosts = fireStore.findAll()
+            findPosts.forEach { postModel ->
+                postModel.locations.forEach {
+                    val loc = LatLng(it.latitude, it.longitude)
+                    val options = MarkerOptions().title(it.title).position(loc)
+                    map.addMarker(options).tag = it
+                    map.moveCamera(CameraUpdateFactory.newLatLng(loc))
+                }
+            }
+        }else {
+            val findPosts = fireStore.findFavourites()
+            if (findPosts.size == 0){
+                map.clear()
+            }else {
+                findPosts.forEach { postModel ->
+                    postModel.locations.forEach {
+                        val loc = LatLng(it.latitude, it.longitude)
+                        val options = MarkerOptions().title(it.title).position(loc)
+                        map.addMarker(options).tag = it
+                        map.moveCamera(CameraUpdateFactory.newLatLng(loc))
+                    }
+                }
             }
         }
     }
 
-    fun doMarkerClick(title: String?): Location? {
-        val findPosts = fireStore.findFavourites()
-        var location: Location?
-        for (post in findPosts){
-            location = post.locations.find { p -> p.title == title }
-            val index = post.locations.indexOf(location)
-            if(location != null){
-                view.markerLocations(location,post,index)
+    fun doMarkerClick(title: String?, filter: Boolean): Location? {
+        if (filter){
+            val findPosts = fireStore.findAll()
+            var location: Location?
+            for (post in findPosts) {
+                location = post.locations.find { p -> p.title == title }
+                val index = post.locations.indexOf(location)
+                if (location != null) {
+                    view.markerLocations(location, post, index)
+                }
+            }
+        }else {
+            val findPosts = fireStore.findFavourites()
+            var location: Location?
+            for (post in findPosts) {
+                location = post.locations.find { p -> p.title == title }
+                val index = post.locations.indexOf(location)
+                if (location != null) {
+                    view.markerLocations(location, post, index)
+                }
             }
         }
         return null

@@ -12,6 +12,11 @@ import org.jetbrains.anko.info
 class SplashActivity : AppCompatActivity(),AnkoLogger {
     lateinit var app : MainApp
 
+    override fun onStart() {
+        super.onStart()
+        app.fireStore.clearPosts()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)

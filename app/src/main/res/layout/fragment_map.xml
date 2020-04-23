@@ -27,7 +27,7 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="400dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mMapAppBar" />
@@ -48,30 +48,45 @@
                 android:id="@+id/mMapName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text=""
                 android:textSize="25sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/mFilteringItems" />
 
             <TextView
                 android:id="@+id/mMapDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text=""
                 android:textSize="25sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mMapName" />
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/mMapViewPager"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mMapDescription" />
+
+
+            <Button
+                android:id="@+id/mFilteringItems"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/greybutton"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/filtering_favourites"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/mMapName"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

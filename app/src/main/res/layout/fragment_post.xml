@@ -65,9 +65,20 @@
                 android:id="@+id/mPostMap"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/mPostSelectMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bluebutton"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorWhite"
+                android:text="Location Select" />
 
             <EditText
                 android:id="@+id/mPostDescription"

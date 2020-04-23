@@ -29,10 +29,32 @@
         <argument
             android:name="postModel"
             app:argType="com.example.mobileappdev2.models.PostModel"/>
+        <action
+            android:id="@+id/action_postFragment_to_selectLocationView"
+            app:destination="@id/selectLocationView" >
+            <argument
+                android:name="postModel"
+                app:argType="com.example.mobileappdev2.models.PostModel"/>
+            <argument
+                android:name="position"
+                app:argType="integer" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.mobileappdev2.maps.MapView"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/selectLocationView"
+        android:name="com.example.mobileappdev2.selectlocation.SelectLocationView"
+        android:label="fragment_select_location"
+        tools:layout="@layout/fragment_select_location" >
+        <argument
+            android:name="postModel"
+            app:argType="com.example.mobileappdev2.models.PostModel"/>
+        <argument
+            android:name="position"
+            app:argType="integer" />
+    </fragment>
 </navigation>

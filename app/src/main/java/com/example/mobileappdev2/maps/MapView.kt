@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.mobileappdev2.R
-import com.example.mobileappdev2.adapter.ImageAdapter
 import com.example.mobileappdev2.adapter.ImageAdapterMap
 import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.Location
@@ -24,6 +23,7 @@ class MapView : BaseView(),GoogleMap.OnMarkerClickListener {
     lateinit var mapView: View
     lateinit var presenter: MapsPresenter
     var postModel = PostModel()
+    var filter = false
 
 
 
@@ -43,10 +43,21 @@ class MapView : BaseView(),GoogleMap.OnMarkerClickListener {
 //      Sets up map
         view.mapView.getMapAsync {
             map = it
-            presenter.initMap(map)
+            presenter.initMap(map,false)
             map.setOnMarkerClickListener(this)
         }
         mapView.mMapToolbar.title = getString(R.string.locations_on_maps)
+
+
+        mapView.mFilteringItems.setOnClickListener {
+            filter = !filter
+            presenter.initMap(map,filter)
+            if(filter){
+                mapView.mFilteringItems.text = getString(R.string.filtering_all)
+            }else{
+                mapView.mFilteringItems.text = getString(R.string.filtering_favourites)
+            }
+        }
 
         (activity as AppCompatActivity?)!!.setSupportActionBar(mapView.mMapToolbar)
         setHasOptionsMenu(true)
@@ -104,7 +115,7 @@ class MapView : BaseView(),GoogleMap.OnMarkerClickListener {
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        presenter.doMarkerClick(marker.title)
+        presenter.doMarkerClick(marker.title,filter)
         return false
     }
 
