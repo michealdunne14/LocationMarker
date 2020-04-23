@@ -1,5 +1,6 @@
 package com.example.mobileappdev2.base
 
+import android.app.ProgressDialog
 import androidx.fragment.app.Fragment
 import com.example.mobileappdev2.models.Location
 import com.example.mobileappdev2.models.PostModel
@@ -25,7 +26,10 @@ open abstract class BaseView: Fragment(), AnkoLogger {
     open fun gotoMainPageFromRegister(){}
     open fun setImages(imageArrayList: ArrayList<String>) {}
     open fun searchLandmarks(findSearchedPosts: ArrayList<PostModel>) {}
-    open fun setLocation(landmarkName: String, latitude: Double, longitude: Double) {}
+    open fun notifyDataChange(){}
+    open fun setLocationName(landmarkName: String) {}
+    open fun navigateUp(){}
+    open fun dialogDismiss(){}
     open fun markerLocations(
         location: Location,
         post: PostModel,

@@ -24,6 +24,8 @@ class StartPresenter(view: BaseView): BasePresenter(view), AnkoLogger {
 
     fun fetchPosts(){
         fireStore.currentUserId()
+        app.fireStore.fetchFavourites{
+        }
         fireStore.fetchPosts {
             view.gotoMainPage()
         }

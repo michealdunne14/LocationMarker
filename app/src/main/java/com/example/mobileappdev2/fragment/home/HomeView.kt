@@ -61,7 +61,7 @@ class HomeView : BaseView(), LandmarkListener,AnkoLogger {
                 homeView.mFilteringItems.text = getString(R.string.filter_all)
             }else{
                 filter = true
-                homeView.mFilteringItems.text = getString(R.string.filter_by_likes)
+                homeView.mFilteringItems.text = getString(R.string.filtering_favourites)
             }
         }
 
@@ -98,6 +98,10 @@ class HomeView : BaseView(), LandmarkListener,AnkoLogger {
 
     override fun searchLandmarks(findSearchedPosts: ArrayList<PostModel>) {
         homeView.mLandmarkList.adapter = LandmarkAdapter(findSearchedPosts, this@HomeView, presenter)
+        homeView.mLandmarkList.adapter?.notifyDataSetChanged()
+    }
+
+    override fun notifyDataChange(){
         homeView.mLandmarkList.adapter?.notifyDataSetChanged()
     }
 
