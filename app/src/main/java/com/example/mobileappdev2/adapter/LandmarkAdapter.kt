@@ -64,11 +64,14 @@ class LandmarkAdapter(
 
             })
 
-            itemView.mCardName.text = postModel.locations[0].title
-            itemView.mCardLocation.text = "${postModel.locations[0].latitude}  ${postModel.locations[0].longitude}"
-            itemView.mCardDescription.text = postModel.description
-            itemView.mCardCountry.text = "Country Visited:${postModel.country}"
-            itemView.mCardDate.text = "Date Visited: ${postModel.datevisted}"
+            if (postModel.locations.size >= 1) {
+                itemView.mCardName.text = postModel.locations[0].title
+                itemView.mCardLocation.text =
+                    "${postModel.locations[0].latitude}  ${postModel.locations[0].longitude}"
+                itemView.mCardDescription.text = postModel.description
+                itemView.mCardCountry.text = "Country Visited:${postModel.country}"
+                itemView.mCardDate.text = "Date Visited: ${postModel.datevisted}"
+            }
 
             var visitedCheck = postModel.postLiked
             var favouriteCheck = postModel.favourite

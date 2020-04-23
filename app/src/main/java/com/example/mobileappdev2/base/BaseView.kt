@@ -29,6 +29,7 @@ open abstract class BaseView: Fragment(), AnkoLogger {
     open fun notifyDataChange(){}
     open fun setLocationName(landmarkName: String) {}
     open fun navigateUp(){}
+    open fun hideCustomButton(){}
     open fun dialogDismiss(){}
     open fun markerLocations(
         location: Location,

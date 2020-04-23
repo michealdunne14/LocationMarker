@@ -14,6 +14,8 @@ import com.example.mobileappdev2.adapter.TabsPagerAdapter
 import com.example.mobileappdev2.animation.getNavOptions
 import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.PostModel
+import com.example.mobileappdev2.post.imageArrayList
+import com.example.mobileappdev2.post.locationArrayList
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_layout.view.*
 import org.jetbrains.anko.AnkoLogger
@@ -114,6 +116,8 @@ class PagerFragmentView : BaseView(),AnkoLogger,LandmarkListener {
                 pagerView.findNavController().navigate(action,
                     getNavOptions()
                 )
+                imageArrayList.clear()
+                locationArrayList.clear()
             }
             R.id.item_map -> {
                 val action = PagerFragmentViewDirections.actionPagerFragmentViewToMapFragment()

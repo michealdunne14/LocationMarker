@@ -10,6 +10,7 @@ import com.example.mobileappdev2.interfacestore.InfoStore
 import com.example.mobileappdev2.models.Country
 import com.example.mobileappdev2.models.PostModel
 import com.example.mobileappdev2.models.UserModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -38,6 +39,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     var totalLikes: Long = 0
     var totalFavourites: Long = 0
     var postModel = PostModel()
+    var latLng: LatLng? = null
 
 
     //  Find all users posts
@@ -129,10 +131,11 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     //  Create a post and upload the images
     override fun create(postModel: PostModel, view: View) {
         val key = db.child("users").child(user.fbId).child("posts").push().key
+        totalPosts++
         key?.let {
             postModel.fbId = key
             posts.add(postModel)
-            updateImage(postModel, false)
+            updateImage(postModel, false,view)
         }
     }
 
@@ -142,11 +145,10 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
             p.fbId == postModel.fbId
         }
         if (foundPost != null) {
-//            foundPost.titles = postModel.titles
             foundPost.country = postModel.country
             foundPost.datevisted = postModel.datevisted
             foundPost.description = postModel.description
-            updateImage(postModel,true)
+            updateImage(postModel, true, view)
         }
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("locations").setValue(postModel.locations)
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("country").setValue(postModel.country)
@@ -163,6 +165,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
             postModel.favourite = false
             favourites.remove(postModel)
         }
+        totalFavourites++
         db.child("users").child(userId).child("posts").child(postModel.fbId).child("favourite").setValue(postModel.favourite)
     }
 
@@ -203,7 +206,8 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
     //  add image to post
     fun updateImage(
         postModel: PostModel,
-        update: Boolean
+        update: Boolean,
+        view: View
     ) {
         val postImageArrayList = ArrayList<String>()
         postImageArrayList.addAll(postModel.images)
@@ -214,8 +218,8 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
             }
         }
 
-        if (removingImage.size == 0){
-            db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
+        if (removingImage.size == 0 && update){
+            view.findNavController().navigateUp()
         }
 
         removingImage.forEachIndexed { index, image ->
@@ -255,6 +259,7 @@ class FireStore(val context: Context): InfoStore, AnkoLogger {
                                     }
                                     db.child("users").child(userId).child("posts").child(postModel.fbId).setValue(postModel)
                                 }
+                                view.findNavController().navigateUp()
                             }
                         }
                     }

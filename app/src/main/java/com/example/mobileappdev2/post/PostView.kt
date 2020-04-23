@@ -17,6 +17,7 @@ import com.example.mobileappdev2.activity.CustomDialog
 import com.example.mobileappdev2.adapter.CountryListener
 import com.example.mobileappdev2.adapter.DataAdapter
 import com.example.mobileappdev2.adapter.ImageAdapter
+import com.example.mobileappdev2.animation.getNavOptions
 import com.example.mobileappdev2.base.BaseView
 import com.example.mobileappdev2.models.Location
 import com.example.mobileappdev2.models.PostModel
@@ -58,7 +59,10 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         view.mPostMap.onCreate(savedInstanceState)
 
         //Sets up map
-        loadMap(view, false)
+        loadMap(view)
+
+        val postModel = PostViewArgs.fromBundle(arguments!!).postModel
+        presenter.postModel = postModel
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -94,14 +98,15 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
 
         })
 
-        val postModel = PostViewArgs.fromBundle(arguments!!).postModel
-        presenter.postModel = postModel
+        view.mPostSelectMap.setOnClickListener {
+            val action = PostViewDirections.actionPostFragmentToSelectLocationView(postModel,imagePosition)
+            postView.findNavController().navigate(action, getNavOptions())
+        }
 
         if(postModel.fbId.isNotEmpty()){
             info { "Editing Landmark" }
             view.mPostDescription.setText(postModel.description)
             view.mPostSelectCountry.text = postModel.country
-            post
             postView.mPostMap.visibility = View.VISIBLE
             val viewPager = view.findViewById<ViewPager>(R.id.mPostViewPager)
             val adapter = ImageAdapter(view.context, postModel.images)
@@ -150,23 +155,27 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         //      Updates or creates a post
         postView.mPostButton.setOnClickListener {
             info { "Posting Landmark" }
-            post.description = mPostDescription.text.toString()
-            post.country = mPostSelectCountry.text.toString()
-            post.images = presenter.imageArrayList
-            post.locations = presenter.locationArrayList
-            post.fbId = postModel.fbId
-            post.favourite = postModel.favourite
-            post.postLiked = postModel.postLiked
+            postModel.description = mPostDescription.text.toString()
+            postModel.country = mPostSelectCountry.text.toString()
+            postModel.images = imageArrayList
+            postModel.locations = locationArrayList
+            postModel.fbId = postModel.fbId
+            postModel.favourite = postModel.favourite
+            postModel.postLiked = postModel.postLiked
             if (date != "") {
-                post.datevisted = date
+                postModel.datevisted = date
             }
-            if (post.images.isNotEmpty() && post.locations.isNotEmpty() && post.description.isNotEmpty() && post.country.isNotEmpty()){
-                presenter.createUpdatePost(editingPost,post,postView)
+            if (postModel.images.isNotEmpty() && postModel.locations.isNotEmpty() && postModel.description.isNotEmpty() && postModel.country.isNotEmpty()){
+                dialog = ProgressDialog.show(context, "","Loading. Please wait...",true )
+                presenter.createUpdatePost(editingPost,postModel,postView)
             }else{
                 Snackbar.make(postView,"Please Fill in an image and a title", Snackbar.LENGTH_SHORT).show()
                 info("Please Fill in an image and a title")
             }
         }
+
+        presenter.customLocation(view,imagePosition)
+
 
 //      Open image gallery
         view.mPostSelectImage.setOnClickListener {
@@ -177,7 +186,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         return view
     }
 
-    private fun loadMap(view: View, editing: Boolean) {
+    private fun loadMap(view: View) {
         view.mPostMap.getMapAsync {
             map = it
             presenter.initMap(map)
@@ -189,7 +198,7 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         val viewPager = postView.findViewById<ViewPager>(R.id.mPostViewPager)
         val adapter = ImageAdapter(postView.context, imageArrayList)
         viewPager.adapter = adapter
-        if (post.locations.size != 0) {
+        if (post.locations.size != 0 && post.locations.size > imagePosition) {
             postView.mPostTitle.setText(post.locations[imagePosition].title)
         }
     }
@@ -223,6 +232,10 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
         }
     }
 
+    override fun hideCustomButton(){
+        postView.mPostSelectMap.visibility = View.GONE
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         postView.mPostMap.onDestroy()
@@ -236,12 +249,13 @@ class PostView : BaseView(), AnkoLogger, CountryListener {
     override fun onPause() {
         super.onPause()
         postView.mPostMap.onPause()
+        dialog.dismiss()
     }
 
     override fun onResume() {
         super.onResume()
         postView.mPostMap.onResume()
-        loadMap(postView,true)
+        loadMap(postView)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
