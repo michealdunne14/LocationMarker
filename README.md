@@ -1,5 +1,5 @@
 # Location Marker
-This app allows users to upload images of places that you visited. You can view a list of all the locations in a recycler view. 
+This app allows users to upload images of places that you visited. You can view a list of all the locations in a recycler view and filter this. The user can login and register and filter items. I can add items to favourite and view all these locations on a map. 
 
 ## Add
 There is a country select where you can search for a country 
